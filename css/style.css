@@ -2,4 +2,15 @@ body {
     background-color: gray;
 }
 
+.frist-block {
+    position: absolute;
+    top: 0;
+}
+
+.imagetime {
+    position: relative;
+    width: 900px;
+    height: 500px;
+}
+
 ;
