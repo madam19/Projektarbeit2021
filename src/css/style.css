@@ -1,0 +1,36 @@
+body {
+    background-color: gray;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+.frist-block {
+    position: absolute;
+    top: 0;
+    padding: 30px 10%;
+    position: relative;
+}
+
+.main {
+    margin: 30px;
+}
+
+.imagetime {
+    position: relative;
+    width: 800px;
+    height: 500px;
+}
+
+button a {
+    text-decoration: none;
+}
+
+.inputData {
+    position: absolute;
+}
+
+;
