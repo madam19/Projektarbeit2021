@@ -9,18 +9,20 @@ h1 {
 }
 
 .frist-block {
-    position: absolute;
     top: 0;
-    padding: 30px 10%;
-    position: relative;
+    padding: 20px 5%;
 }
 
 .main {
+    position: absolute;
     margin: 30px;
+    display: inline-block;
+    height: 500px;
 }
 
-.imagetime {
+.image {
     position: relative;
+    display: inline-block;
     width: 800px;
     height: 500px;
 }
@@ -30,7 +32,16 @@ button a {
 }
 
 .inputData {
-    position: absolute;
+    position: re;
+    display: inline-block;
+    vertical-align: center;
+    justify-items: center;
+    padding: 20px 20px;
+    width: 300px;
 }
 
-;
+.form input {
+    height: 50px;
+    padding: 20px;
+    font-size: 15px;
+}
