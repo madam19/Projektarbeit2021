@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="de">
 
@@ -26,20 +28,25 @@
             </div>
             <div class="inputData">
 
-                <form action="#">
+                <form action="mydata.php" method="post">
                     <!--input email-->
-                    <input type="email" placeholder="Your@email.com">
+                    <input type="email" name="emailUser" placeholder="deine@email.de"
+                           value="<?=$_POST['emailUser'] ?? ''?>"
+                    ><br>
                     <!-- input password -->
-                    <input type="password" placeholder="Password">
+                    <input type="password" name ="passwordUser" placeholder="Password"
+                           value="<?=$_POST['passwordUser'] ?? ''?>"
+                    ><br>
 
 
-                    <button type="Enter"><a href="mydata.html">Enter</a></button>
+                    <button type="submit">Enter</button>
+
                 </form>
+
             </div>
 
         </div>
     </div>
-
 
 
     <script src="./js/main.js"></script>
