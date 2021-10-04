@@ -26,10 +26,13 @@ function getTagDE($date) {
     return  $tag;
 }
 
-function inputDaten ($str){
+function inputDaten ($str, $placeholder){
     ?>
-    <input type="text" name="$str" placeholder=" <?php echo $str ?> "
-                   value="<?=$_GET['$str'] ?? ''?>" >
-<?php
+    <input type="text" name="$str"  placeholder= " <?php echo $placeholder ?> " onkeydown="handleInput(this)" onblur="sendValue()"
+           value="<?=$_GET['$str'] ?? ''?>" >
+    <?php
     return $_GET;
 }
+
+
+

@@ -28,7 +28,7 @@
             </div>
             <div class="inputData">
 
-                <form action="mydata.php" method="post">
+                <form action="php/mydata.php" method="post">
                     <!--input email-->
                     <input type="email" name="emailUser" placeholder="deine@email.de"
                            value="<?=$_POST['emailUser'] ?? ''?>"
