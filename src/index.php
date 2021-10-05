@@ -18,6 +18,15 @@
 
 <body>
 
+    <div id="zeiten-tabelle">
+        <table>
+            <tr><th>Datum</th></tr>
+            <tr id="2021-06-01">
+                <td>2021</td>
+            </tr>
+        </table>
+    </div>
+
     <div class="frist-block">
         <h1> Arbeitszeit</h1>
         <!-- add image -->
@@ -39,7 +48,7 @@
                     ><br>
 
 
-                    <button type="submit">Enter</button>
+                    <button type="submit" style="cursor: pointer">Enter</button>
 
                 </form>
 
