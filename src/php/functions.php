@@ -1,6 +1,7 @@
 <?php
 
 function getPdo(){
+    // подключение к бд
     $dsn = 'mysql:dbname=knmde_db85;host=dedi154.your-server.de;charset=utf8';
     $user = 'knmde_85';
     $pass = "gM5FGuqWab52QzqT";
@@ -8,23 +9,38 @@ function getPdo(){
     $pdo = new PDO($dsn, $user, $pass);
     return $pdo;
 }
-
-function getUserZeiten($pdo, $query, $email){
+function getUser($pdo, $query, $email)
+{
     /** @var PDO $pdo */
-    $stmt = $pdo -> prepare($query);
-    $stmt->execute([":email" => $email]);     //
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        ":email" => $email
+
+    ]);     // выполнение запроса и поиск
     $result = $stmt->fetchAll();
     return $result;
 }
 
-function getTagDE($date) {
-
-  /* setlocale($date, "de_DE");
-   (strftime("%A, $tag"));*/
-    $tag = date('l', strtotime($date));
-
-    return  $tag;
+function getUserZeiten($pdo, $query, $email, $monat, $jahr){
+    /** @var PDO $pdo */
+    $stmt = $pdo -> prepare($query);
+    $stmt->execute([
+        ":email" => $email,
+        ":monat" => $monat,
+        ":jahr" => $jahr
+    ]);     // выполнение запроса и поиск
+    $result = $stmt->fetchAll();
+    return $result;
 }
+
+//function getTagDE($date) {
+//
+//  /* setlocale($date, "de_DE");
+//   (strftime("%A, $tag"));*/
+//    $tag = date('l', strtotime($date));
+//
+//    return  $tag;
+//}
 
 function inputDaten ($str, $placeholder){
     ?>
