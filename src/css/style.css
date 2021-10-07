@@ -44,3 +44,6 @@ form {
     flex-direction: column;
     margin: auto;
 }
+table {
+   width: 100%;
+}

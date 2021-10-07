@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--    <link href="../css/style.css">-->
 
 
     <title>MyData</title>
@@ -59,7 +60,6 @@ if (empty($errors)) {
                         let month = datum.getMonth() + 1;
                         let year = datum.getFullYear();
 
-
                         let url = "../php/queryZeiten.php";  // das php script liegt hier
 
                         $.post(
@@ -71,13 +71,18 @@ if (empty($errors)) {
                             function createTable(result) {
                                 let data = JSON.parse(result);
 
-                                console.log(data);
-                                let controlData = false;
-                                (data.length) != 0 ? controlData = true : '';
+                                // console.log(data);
+                                let controlData = false; // default - new monat
+                                let akzept = false; //kontrolieren akzept
 
+                                // kontroll exist data in Db and accept
+                                if (data.length != 0) {
+                                    controlData = true;
+                                    (data[0]['akzeptiert'] == '1') ? akzept = true : '';//kontrolieren akzept
+                                }
                                 //building a table by month
-                                let head = ["Datum", "Tag", "kommenZeit", "gehenZeit", "pause", "sollStunde", "IST Stunde", "Ist Arbeitszeit",
-                                    "Saldo", "abwesungs Grund", "GesamtSaldo", "Akzept"];
+                                let head = ["Datum", "Tag", "kommenZeit", "gehenZeit", "pause", "sollStunde", "ISTStunde", "IstArbeitszeit",
+                                    "Saldo", "abwesungsGrund", "GesamtSaldo", "Akzept"];
 
                                 let headText = ["Datum", "Wochentag", "kommen Zeit", "gehen Zeit", "pause", "soll Stunde", "IST Stunde", "Ist Arbeitszeit",
                                     "Saldo", "abwesungs Grund", "Gesamt Saldo", "Akzept"];
@@ -86,8 +91,11 @@ if (empty($errors)) {
 
                                 let body = document.body,
                                     table = document.createElement("table");
-
-                                table.style.width = '100%';
+                                $('table').empty(); //remove table, if had
+                                //  document.body.innerHTML = "";
+                                let styleTable = 'background-color: #F5F5CA; width: 100%';
+                                // table.style.width = '100%' ;
+                                table.style = styleTable;
                                 table.setAttribute('border', '1');
 
                                 let row = table.insertRow();
@@ -97,7 +105,6 @@ if (empty($errors)) {
                                     cell.innerHTML = headText[i];
                                 }
                                 //make array Day in this month
-
                                 let endMonth = new Date(year, month, 0).getDate(); // number day in this month
                                 let nowDay = new Date(year, month, 1).getDate(); // 1 day
                                 let arrDays = new Array();
@@ -113,10 +120,18 @@ if (empty($errors)) {
                                     arrDays [i] = day;
                                     nowDay++;
                                 }
-                                // console.log(arrDays);
+
+
+                                let disabled = akzept ? "disabled" : '';
+                                let styles = akzept ?  "background-color: darkseagreen; color: green;" : "background-color:  #efe1c8; font-weight: bold; color: red;";
+                                // i try highlight line
+
+                                // $( "#target" ).click(function() {
+                                //     styles = 'background-color: olive;';
+                                // });
+                                let dayToday;
+
                                 //make table from days
-
-
                                 for (let i = 1; i < arrDays.length; i++) {
                                     row = table.insertRow();  // ellement array day - row
                                     row.id = arrDays[i];
@@ -125,7 +140,8 @@ if (empty($errors)) {
                                     for (let j = 1; j <= headText.length; j++) {   // element head  - cell
                                         let cell = row.insertCell();
                                         let text = arrDays[i];
-                                        cell.className = headText[j];//.replace(/\s+/g, '')
+                                        cell.className = (headText[j-1]).replace(/ /g, '');
+
 
                                         switch (j) {
                                             case 2: // wochentag per date
@@ -133,90 +149,114 @@ if (empty($errors)) {
                                                 let dat = new Date(arrDays[i]); //
 
                                                 text = days[dat.getDay()];
+
+                                                // if Sa-So come next row
+                                                dayToday = text;
+
                                                 if (text == 'Sonntag' || text == 'Samstag') {
                                                     j = headText.length;
                                                 }
 
                                                 break;
                                             case 3: // kommen Zeit
-
-                                                // if ((controlData) && (data.includes(arrDays[i]))) {
-                                                //wenn data existirt und gibt es diese Tag
-                                                // {  == ) typeof (data[i][j])=='undefined')
-                                                // text = '+++';
-                                                // text = data[i]['kommenZeit'];
-
-                                                // } else { // no exist -  new month
-                                                text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str"  placeholder="08:00" onkeydown="handleInput(this)" onblur="sendZeit()">'
-
-
-                                                // }
+                                                text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="sendZeit()"' + disabled + '>';
 
                                                 break;
                                             case 4: // gehenZeit
-
-                                                // if ((controlData) && (data.includes(arrDays[i]))) {
-                                                //     //wenn data existirt
-                                                //     // &&{ (data[i]["Datum"] == arrDays[i])&& typeof (data[i][j])=='undefined')
-                                                //     text = '+++';
-                                                //     // text = data[i]['gehenZeit'];
-                                                //
-                                                // } else { // no exist -  new month
-                                                text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str"  placeholder= "16:30" onkeydown="handleInput(this)" onblur="sendZeit()">'
-
-                                                // }
+                                                text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="sendZeit()"' + disabled + '>';
                                                 break;
                                             case 5: //pause
-                                                // if ((controlData) && (data.includes(arrDays[i]))) {
-                                                //     //wenn data existirt
-                                                //     // &&{ (data[i]["Datum"] == arrDays[i])&& typeof (data[i][j])=='undefined')
-                                                //     text = '+++';
-                                                //     // text = data[i]['pause'];
-                                                //
-                                                // } else { // no exist -  new month
-                                                text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str"  placeholder= "00:30" onkeydown="handleInput(this)" onblur="sendZeit()">'
+                                                text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:30" onkeydown="handleInput(this)" onblur="sendZeit()"' + disabled + '>';
 
-                                                // }
                                                 break;
                                             case 6: //soll Stunde
-// в зависимости от рабочей модели и дня // depending on working model and day
-//                                                 if (data[i-1]['AM_ID'] == 2) {
-//
+// в зависимости от модели работы и дня // depending on working model and day
+//                                             if (data[i - 1]['AM_ID'] == 2) {
+//                                                 if
 //                                                     text = 'arbeitsModel 2';
-//                                                     // text = data[i]['pause'];
+                                                // text = data[i]['pause'];
 //
 //                                                 } else { // no exist -  new month
 //                                                     text = '--- ';
 //                                                     // '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str"  placeholder= "00:30:00" onkeydown="handleInput(this)" onblur="sendZeit()">'
 //
 //                                                 }
-                                                text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str"  placeholder= "00:30" onkeydown="handleInput(this)" onblur="sendZeit()">'
+
+                                                text = "08:00";
+
+                                                // '<input data-id="sollStunde" data-datum="' + arrDays[i] + '" type="time" name="$str"  value= "08:00" onkeydown="handleInput(this)" onblur="sendZeit()">';
 
                                                 break;
-                                            case 7: // ist Arbeitzeit - berechnet
+                                            case
+                                            7
+                                            :// ist stunde
+                                                text = "berechnet";
+
+                                                // text = $('#' + arrDays[i] + '');
+                                                break;
+                                            case
+                                            8
+                                            : // ist Arbeitzeit - berechnet
                                                 text = "berechnet";
                                                 break;
-                                            case 8: // Saldo - berechnet
+                                            case
+                                            9
+                                            : // Saldo - berechnet
+
                                                 text = "berechnet";
                                                 break;
-                                            case 9: // anwesung Grung wenn gibt's
-                                                if text = "berechnet";
+                                            case
+                                            10
+                                            :// anwesung Grung wenn gibt's
+                                                text = '<select name="abwendungsGrund">' +
+                                                    ' <option value=" "></option>' +
+                                                    '<option value="krank">krank</option>' +
+                                                    '<option value="Urlaub">Urlaub</option>'
+                                                ;
                                                 break;
-                                            case 10: //Gesamt Saldo
+                                            case
+                                            11
+                                            : //Gesamt Saldo
                                                 text = "berechnet";
                                                 break;
-                                            case 11: // akzeptirt
-                                                text = "berechnet";
-                                                break;
-                                            case 12:
-                                                !(controlData) ? text = 'noch nicht' : text = 'akzeptirt';
+                                            case
+                                            12
+                                            :// akzeptirt
+                                                !(controlData) ? text = 'noch nicht' : text = 'akzeptiert';
                                                 break;
 
 
                                         }
+
                                         cell.innerHTML = text;
                                     }
                                 }
+                                body.appendChild(table);
+
+                                // window.setTimeout(setData, 2000, data, headText, head);
+
+                                for (let i = 0; i < data.length; i++) {
+                                    let rowId = data[i]['Datum'];
+
+                                    for (let j = 0; j < headText.length; j++) {
+                                        let cellClass = headText[j];
+
+                                        /*if(head[j] === "kommenZeit"){
+                                            console.log('#' + rowId + ' [data-id="' + head[j] + '"]');
+                                            console.log(data[i][head[j]]);
+                                        }*/
+
+
+                                        //console.log($('#' + rowId + ' [data-id="' + head[j] + '"]'));
+                                        //$('#' + rowId + ' [data-id="' + head[j] + '"]').val(data[i][head[j]]);
+                                        $('#' + rowId + ' [data-id="' + head[j] + '"]').val(data[i][head[j]]);
+
+
+                                    }
+
+                                }
+
+
                                 // if (arrDays[i]= data[]['Datum'] ) {
 
                                 //
@@ -233,7 +273,7 @@ if (empty($errors)) {
                                 //     } else {
                                 //        = data[i][head[j]];
                                 //     }
-                                body.appendChild(table);
+
                             }
                         )
                     }
@@ -243,6 +283,28 @@ if (empty($errors)) {
             },
         );
 
+        function setData(data, headText, head){
+            for (let i = 0; i < data.length; i++) {
+                let rowId = data[i]['Datum'];
+
+                for (let j = 0; j < headText.length; j++) {
+                    let cellClass = headText[j];
+
+                    /*if(head[j] === "kommenZeit"){
+                        console.log('#' + rowId + ' [data-id="' + head[j] + '"]');
+                        console.log(data[i][head[j]]);
+                    }*/
+
+
+                    //console.log($('#' + rowId + ' [data-id="' + head[j] + '"]'));
+                    //$('#' + rowId + ' [data-id="' + head[j] + '"]').val(data[i][head[j]]);
+                    $('#' + rowId + ' [data-id="' + head[j] + '"]').val('12:34');
+
+
+                }
+
+            }
+        }
 
     </script>
 
@@ -297,7 +359,7 @@ if (empty($errors)) {
 //        }
 //
 ?>
-
+    <button type="submit"><a href="#">Speichern</a></button>
     </div>
 
     <?php
@@ -312,7 +374,7 @@ $pdo = null;   // Verbindung schliessen
 ?>
 <br>
 <button type="reset"><a href="../index.php">Zuruck</a></button>
-<button type="submit"><a href="#">Speichern</a></button>
+
 
 </body>
 

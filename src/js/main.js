@@ -25,12 +25,21 @@
 
     function sendZeit() {
 
-        var datum = $(event.currentTarget).data("datum");
-        var id = $(event.currentTarget).data("users_ID");
+        let datum = $(event.currentTarget).data("datum");
+        let id = $(event.currentTarget).data("users_ID");
+        let key = $("#data-id").val();
 
         // holt den wert aus input mit id value
         let value = $("#value").val();
-
+        $.post(
+            '../php/sendZeit.php',
+            {
+                Datum: datum,
+                user_ID: id,
+                key: key,
+                value: value
+            }
+        )
 
         /* value = jQuery("#value").val();*/
 

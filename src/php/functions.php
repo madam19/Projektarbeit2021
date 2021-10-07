@@ -32,23 +32,27 @@ function getUserZeiten($pdo, $query, $email, $monat, $jahr){
     $result = $stmt->fetchAll();
     return $result;
 }
+function sendUserZeiten($pdo, $sql, $user_Id, $key, $value){
 
-//function getTagDE($date) {
-//
-//  /* setlocale($date, "de_DE");
-//   (strftime("%A, $tag"));*/
-//    $tag = date('l', strtotime($date));
-//
-//    return  $tag;
-//}
-
-function inputDaten ($str, $placeholder){
-    ?>
-    <input type="text" name="$str"  placeholder= " <?php echo $placeholder ?> " onkeydown="handleInput(this)" onblur="sendValue()"
-           value="<?=$_GET['$str'] ?? ''?>" >
-    <?php
-    return $_GET;
+    $stmt = $pdo -> prepare($sql);
+    $stmt->execute([
+        ":user_Id" => $user_Id,
+        ":key" => $key,
+        ":value" => $value
+    ]);     // выполнение запроса и поиск
+    $result = $stmt->fetchAll();
+    return $result;
 }
+
+
+
+//function inputDaten ($str, $placeholder){
+//    ?>
+<!--    <input type="text" name="$str"  placeholder= " --><?php //echo $placeholder ?><!-- " onkeydown="handleInput(this)" onblur="sendValue()"-->
+<!--           value="--><?//=$_GET['$str'] ?? ''?><!--" >-->
+<!--    --><?php
+//    return $_GET;
+//}
 
 
 
