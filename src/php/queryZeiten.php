@@ -29,5 +29,5 @@ $pdo = getPdo();
 echo json_encode($result);
 
 
-//SELECT zeit.users_ID as `users_ID`, zeit.Datum as `Datumatum`, zeit.kommenZeit as kommenZeit, zeit.gehenZeit as gehenZeit, zeit.pauseas pause,
+//SELECT zeit.users_ID as `users_ID`, zeit.Datum as `Datumatum`, zeit.kommenZeit as 'kommenZeit', zeit.gehenZeit as 'gehenZeit', zeit.pause as 'pause',
 //(SELECT abwesungsgrund.abwesungsGrund_name FROM abwesungsGrund) AS `abwesungsGrund` , `akzeptiert` FROM `zeit` WHERE 1

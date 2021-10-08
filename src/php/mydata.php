@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<!--    <link href="../css/style.css">-->
+    <link href="../css/style.css">
 
 
     <title>MyData</title>
@@ -31,18 +31,19 @@ if (empty($result)) {
 }
 //if the password and email are correct, then we display the data on the screen
 if (empty($errors)) {
-    echo "<br><strong>" . $result[0]["FamilienName"] . " " . $result[0]["Vorname"] . "<br></strong>";
+//echo "<div style='border: black 1px solid'>"
+    echo "<div><br><strong>" . $result[0]["FamilienName"] . " " . $result[0]["Vorname"] . "<br></strong>";
     echo " Deine email:  " . $result[0]["email"] . "<br>" . " Deine Arbeitsmodell " . $result[0]["AM_ID"] . "<br>";
-    echo "<strong> Personal-Nr. " . $result[0] ["personalNR"] . " " . "<br></strong>";
+    echo "<strong> Personal-Nr. " . $result[0] ["personalNR"] . " " . "<br></strong></div>";
 
-
+//echo "</div>"
     ?>
 
     <!-- script now-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossOrigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script scr="../js/main.js"></script>
+    <script src="../js/main.js"></script>
 
     <!--  // display month-->
     <!--input month-->
@@ -54,10 +55,11 @@ if (empty($errors)) {
     <script>
         $(document).ready(function () {
                 $("#ok").click(function () {
-                        //$("table").show();
+
                         let datum = new Date($('#month').val());
-                        // console.log(datum);
+
                         let month = datum.getMonth() + 1;
+                    // console.log(month);
                         let year = datum.getFullYear();
 
                         let url = "../php/queryZeiten.php";  // das php script liegt hier
@@ -69,9 +71,10 @@ if (empty($errors)) {
                                 year: year
                             },
                             function createTable(result) {
+                                // console.log(result);
                                 let data = JSON.parse(result);
 
-                                // console.log(data);
+                            ;
                                 let controlData = false; // default - new monat
                                 let akzept = false; //kontrolieren akzept
 
@@ -159,14 +162,14 @@ if (empty($errors)) {
 
                                                 break;
                                             case 3: // kommen Zeit
-                                                text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="sendZeit()"' + disabled + '>';
+                                                text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
 
                                                 break;
                                             case 4: // gehenZeit
-                                                text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="sendZeit()"' + disabled + '>';
+                                                text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
                                                 break;
                                             case 5: //pause
-                                                text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:30" onkeydown="handleInput(this)" onblur="sendZeit()"' + disabled + '>';
+                                                text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:30" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
 
                                                 break;
                                             case 6: //soll Stunde
@@ -208,11 +211,17 @@ if (empty($errors)) {
                                             case
                                             10
                                             :// anwesung Grung wenn gibt's
-                                                text = '<select name="abwendungsGrund">' +
-                                                    ' <option value=" "></option>' +
+
+
+                                                text =
+                                                    '<select data-datum="'+ arrDays[i]+'"name="abwendungsGrund" onchange="saveDay()">' +
+                                                    ' <option value=" "> </option>' +
                                                     '<option value="krank">krank</option>' +
                                                     '<option value="Urlaub">Urlaub</option>'
+
                                                 ;
+
+
                                                 break;
                                             case
                                             11
