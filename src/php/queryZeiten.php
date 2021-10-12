@@ -7,6 +7,7 @@ $email = $_SESSION['email'];
 $monat = $_REQUEST['month'];
 $jahr = $_REQUEST['year'];
 
+
 // PDO object
 
 $pdo = getPdo();
