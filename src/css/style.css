@@ -1,6 +1,5 @@
 body {
-    background-color: gray;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
 h1 {
@@ -8,43 +7,5 @@ h1 {
     text-align: center;
 }
 
-.frist-block {
-    top: 0;
-    padding: 20px 5%;
-    display: flex;
-    flex-direction: column;
-}
 
-.main {
-    margin: 30px;
-    display: flex;
-    flex-direction: row;
-}
-
-.inputData {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 15px;
-}
-
-.inputData * {
-    padding: 10px;
-    font-size: 15px;
-    margin: 15px;
-}
-
-button a {
-    text-decoration: none;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-}
-table {
-   width: 100%;
-}
 

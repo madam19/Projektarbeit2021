@@ -9,18 +9,29 @@ function getPdo(){
     $pdo = new PDO($dsn, $user, $pass);
     return $pdo;
 }
-function getUser($pdo, $query, $email)
+function getUser($pdo, $query, $email, $password)
+{
+    /** @var PDO $pdo */
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        ":email" => $email,
+        ":password" => $password
+    ]);     // query execution and search
+    $result = $stmt->fetchAll();
+    return $result;
+}
+
+function getUserData($pdo, $query, $email)
 {
     /** @var PDO $pdo */
     $stmt = $pdo->prepare($query);
     $stmt->execute([
         ":email" => $email
 
-    ]);     // выполнение запроса и поиск
+    ]);     // query execution and search
     $result = $stmt->fetchAll();
     return $result;
 }
-
 function getUserZeiten($pdo, $query, $email, $monat, $jahr){
 
     /** @var PDO $pdo */
