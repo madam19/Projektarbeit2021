@@ -12,50 +12,96 @@
     <title>MyData</title>
 </head>
 
-<body>
+<body style="background-color: lightgray">
 
 <?php
-require_once "functions.php";
 session_start();
+require_once "functions.php";
 
-$email = $_REQUEST['emailUser'];
-$_SESSION['email'] = $email;
+
+//$email = $_REQUEST['emailUser'];
+$email = $_SESSION['email'];
 
 //         connect to Sql
 $pdo = getPdo();
-$sql = "SELECT * FROM users WHERE users.email =:email"; //
+$sql = "SELECT * FROM users, zeit WHERE users.email =:email"; //
 $result = getUserData($pdo, $sql, $email);
 
 // conect with BD
-var_dump($result);
+//var_dump($result);
 
 
 echo "<div class='container '><br><h2>" . $result[0]["FamilienName"] . " " . $result[0]["Vorname"] . "<br></h2>";
 echo " Deine email:  " . $result[0]["email"] . "<br>" . " Deine Arbeitsmodell " . $result[0]["AM_ID"] . "<br>";
-echo "<strong> Personal-Nr. " . $result[0] ["personalNR"] . " " . "<br>";
-echo "<br>";
-?>
-<!--   warnungen, wenn bis heute keine ausfüllende Daten     -->
-<div class="accordion" id="accordionPanelsStayOpenExample">
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseOne">
-                WARNUNGEN
-            </button>
-        </h2>
-        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-             aria-labelledby="panelsStayOpen-headingOne">
-            <div class="accordion-body">
+echo "<strong><h5> Personal-Nr. " . $result[0] ["personalNR"] . " " . "</h5><br>";
+if ($result[0]["rolles_ID"]=="2" ){
+    ?>
+    <div class="accordion" id="accordionPanelsStayOpenExample" >
+        <div class="accordion-item" style="background-color: rgba(255, 99, 71, 0.4)">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+                        aria-controls="panelsStayOpen-collapseOne" style="background-color: rgba(255, 99, 71, 0.4)">
+                    WARNUNGEN
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                 aria-labelledby="panelsStayOpen-headingOne">
+                <div class="accordion-body">
                    <span>
                        <strong>Sie haben im vergangenen Zeitraum noch nicht ausgefüllte Daten. </strong>
                        Bitte tragen Sie die Datum ein.......
                    </span>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="container row">
+    <button id="zeituebersicht" type="button" class="btn btn-secondary btn-lg m-3">MonatZeit </button>
+    </div>
+<?php
+} else {
+    echo "<br> Deine Rolle ist: admin. ";
+ ?>
+    <div class="accordion" id="accordionPanelsStayOpenExample" >
+        <div class="accordion-item" style="background-color: rgba(255, 99, 71, 0.4)">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+                        aria-controls="panelsStayOpen-collapseOne" style="background-color: rgba(255, 99, 71, 0.4)">
+                    WARNUNGEN
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                 aria-labelledby="panelsStayOpen-headingOne">
+                <div class="accordion-body">
+                   <span>
+                       <strong>Sie haben im vergangenen Zeitraum noch nicht ausgefüllte Daten. </strong>
+                       Bitte tragen Sie die Datum ein.......
+                   </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container row">
+
+
+        <button id = "newEmployee" type="button" class="btn btn-secondary btn-lg m-3 " >einen neuen Arbeiter hinzufügen</button>
+        <button type="button" class="btn btn-secondary btn-lg m-3">Kontrolieren Monat </button>
+        <button type="button" class="btn btn-secondary btn-lg m-3" >Jahresbericht </button>
+        <button id="zeituebersicht" type="button" class="btn btn-secondary btn-lg m-3">MonatZeit </button>
+    </div>
+
+<?php
+
+}
+
+
+
+?>
+<!--   warnungen, wenn bis heute keine ausfüllende Daten     -->
+
+
 
 <?php
 
@@ -80,60 +126,32 @@ $_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="../js/main.js"></script>
 
-<!--   display month-->
-<div class="container">
 
-    <input id="month" type="month" name="month" value="">
-    <button type="submit" id="ok"> ok</button>
 
-   
-</div>
 
 <script>
 
-    //set the default date
-    let nowdate = new Date();
-    $("#month").val(nowdate.getFullYear() + "-" + ((nowdate.getMonth() + 1) < 10 ? "0" + nowdate.getMonth() + 1 : nowdate.getMonth() + 1));
-
-    // if click on ok - create table
-    $(document).ready(function () {
-        $("#ok").click(function () {
-
-                let datum = new Date($('#month').val());
-                let month = datum.getMonth() + 1;
-                // console.log(result);
-                let year = datum.getFullYear();
-
-                let url = "../php/queryZeiten.php";  // das php script liegt hier
-
-                //
-                $.post(
-                    url,
-                    {
-                        month: month,
-                        year: year
-                    },
-                    function handler(result) {
-                        createTable(result, month, year);
-                    }
-                );
-            },
-        );
-
-
+    //setup handlers
+    $("body").on("click", "#zeituebersicht", function(){
+        // console.log("zeitenübersicht");
+        window.location.assign("zeituebersicht.php");
     });
+
+
+    //add new
+    $("body").on("click", "#newEmployee", function(){
+        // console.log("zeitenübersicht");
+        window.location.assign("addNeuMitarbeiter.php");
+    });
+
 </script>
 <div class="container">
 
-    <button type="submit"><a href="#">Speichern</a></button>
-
-
-
-
-    $pdo = null;   // Verbindung schliessen
-    ?>
+<!--    $pdo = null;   // Verbindung schliessen-->
+<!--    ?>-->
     <br>
-    <button type="reset"><a href="../index.php">Zuruck</a></button>
+    <button id= "exit" type="reset"><a href="../index.php">Raus von here!</a></button>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
@@ -144,4 +162,3 @@ $_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
 
 </html>
 
-<!---->

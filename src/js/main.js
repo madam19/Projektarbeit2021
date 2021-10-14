@@ -1,19 +1,21 @@
 // fängt "enter" ab und startet "blur" event
 function handleInput(element) {
     if (event.keyCode === 13) {
-        console.log("enter was pressed");
+             // console.log("enter was pressed");
         element.blur();
+
     }
 }
 
 // bei "blur" sende den wert an das php script
-function sendValue() {
-    // holt den wert aus input mit id value
-    let value = $("#month").val();
-    // ausgabe des wertes in die konsole
-    console.log("sending value " + value);
 
-}
+// function sendValue() {
+//     // holt den wert aus input mit id value
+//     let value = $("#month").val();
+//     // ausgabe des wertes in die konsole
+//     // console.log("sending value " + value);
+//     // setData(data, headText, head);
+// }
 
 
 function saveDay() {
@@ -26,9 +28,10 @@ function saveDay() {
     let pause = row.find(".pause input").val();
     let abwesungsGrund = row.find("select").val();
     let AB_ID = 1;
+    //wenn hat kommen Zeit und gehen  - keine krenk und urlaub
 
 
-// kontroll "AbwesungsGrund"
+// kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
     if (abwesungsGrund == "Urlaub") {
         AB_ID = 3;
         kommenZeit = "08:00:00";
@@ -61,11 +64,7 @@ function saveDay() {
 
 }
 
-// function berechnet() {
-//     let rowId = $(event.currentTarget).data("datum");
-//     let row = $('#' + rowId);
-//
-// }
+
 function createTable(result, month, year) {
     // console.log(result);
     let data = JSON.parse(result);
@@ -87,12 +86,14 @@ function createTable(result, month, year) {
 
     //building a table by month V1
 
+    $('body').remove('table');
+
     let body = document.body,
         table = document.createElement("table");
-    $('table').empty(); //remove table, if had
+    //$('table').empty(); //remove table, if had
     //  document.body.innerHTML = "";
-    let styleTable = 'background-color: #F5F5CA; width: 100%; text-align: center; ';
-    table.className = 'table table-bordered border-secondary caption-top align-center';
+    let styleTable = 'width: 100%; text-align: center;';
+    table.className = 'table table-secondary table-bordered caption-top align-center';
 
     table.style = styleTable;
     table.setAttribute('border', '2px');
@@ -125,11 +126,6 @@ function createTable(result, month, year) {
 
     let disabled = akzept ? "disabled" : '';
     let styles = akzept ? "background-color: darkseagreen; color: green;" : "background-color:  #efe1c8; font-weight: bold; color: red;";
-    //  try highlight line
-
-    // $( "#target" ).click(function() {
-    //     styles = 'background-color: olive;';
-    // });
     let dayToday;
     let head = new Array();
     let usersArbeitsModel = data[0]['AM_ID'];
@@ -138,6 +134,8 @@ function createTable(result, month, year) {
     for (let i = 1; i < arrDays.length; i++) {
         row = table.insertRow();  // ellement array day - row
         row.id = arrDays[i];
+
+
         for (let j = 1; j <= headText.length; j++) {   // element head  - cell
             let cell = row.insertCell();
             let text = '';
@@ -168,9 +166,12 @@ function createTable(result, month, year) {
                     break;
                 case 4: // gehenZeit
                     text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+
+
                     break;
                 case 5: //pause
                     text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:30" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+
 
                     break;
                 case 6: //soll Stunde
@@ -199,28 +200,34 @@ function createTable(result, month, year) {
                         '<option style ="text-align: center" value="Urlaub">Urlaub</option>'
 
                     ;
-                    break;
+// // kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
+//                     $('#' + rowId + ' [data-id="kommenZeit"]').value = "08:00";
+//                     $('#' + rowId + ' [data-id="gehenZeit"]').value = "16:00";
+
+
+                break;
 
                 case
                 11
                 :// akzeptirt
                     (controlData) ? text = 'noch nicht' : text = 'akzeptiert';
                     break;
-
-
             }
-
             cell.innerHTML = text;
         }
     }
+
+
     body.appendChild(table);
-    // window.setTimeout(setData, 2000, data, headText, head);
-    setData(data, headText, head);  // Add data from the database
+// window.setTimeout(setData, 2000, data, headText, head);
+
+    setData(data, headText, head);
+
 
 }
 
-
 function setData(data, headText, head) {
+    //sends data from the database
     let saldo = 0;
     let sollStunde;
     for (let i = 0; i < data.length; i++) {
@@ -237,8 +244,10 @@ function setData(data, headText, head) {
 
                     let strk = new Date(rowId + ' ' + data[i][head[j]]); //.split('-');
                     // console.log(rowId + ' ' + data[i][head[j]]);
+
                     kommenZeit = strk.getTime() / 1000 / 60; // time in min
                     // console.log("kommenZeit: " + kommenZeit);
+
                     break;
                 case 4: //gehenZeit
                     let strg = new Date(rowId + ' ' + data[i][head[j]]); //.split('-');
@@ -259,42 +268,39 @@ function setData(data, headText, head) {
                     strS = new Date(rowId + ' ' + strS);
 
                     sollStunde = strS.getHours() * 60 + strS.getMinutes();  // по кол-ву часов и минут, получаем общее кол-во минут
-
                     // console.log(strS);
                     // console.log(sollStunde);
-
-
                     break;
                 case 7: // IST Stunde
-
                     //calculates work time
                     if (data[i]["abwesungsGrund_Id"] == "2" || data[i]["abwesungsGrund_Id"] == "3") {
                         istArbeitsZeit = sollStunde;
                     } else {
                         istArbeitsZeit = (gehenZeit - kommenZeit) - pause;
                     }
-
-
                     let strI = timeToString(istArbeitsZeit);
-
                     $('#' + rowId + ' .' + head[j]).text(strI).val();
                     break;
                 case 8: //calculates  to display Saldo
-
                     daySaldo = istArbeitsZeit - sollStunde;  // saldo every day
                     let strSaldo = timeToString(daySaldo);
                     saldo += daySaldo;
                     if (data[i]["abwesungsGrund_Id"] == "2" || data[i]["abwesungsGrund_Id"] == "3") {
                         daySaldo = 0;
+
                     }
                     $('#' + rowId + ' .' + head[j]).text(strSaldo).val();
+
                     break;
                 case 9: //abwesung Grund // расчитывается в зависимости от значения AM_ID
+// kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
+
                     if (head[j] == "abwesungsGrund" && data[i]["abwesungsGrund_Id"] == "2") {
                         $('#' + rowId + ' select ').val("krank");
 
                     } else if (head[j] == "abwesungsGrund" && data[i]["abwesungsGrund_Id"] == "3") {
                         $('#' + rowId + ' select ').val("Urlaub");
+
 
                     }
                     break;
@@ -310,31 +316,41 @@ function setData(data, headText, head) {
 
     }
 
+
 } //end function setData
+
 function timeToString(timeInMin) {
-    //calculates the time to display
+    //переводит время в строку для вывода на дисплей
     let str;
     let zeit = Math.abs(timeInMin);
     let stunde = (zeit / 60 | 0);
-
-
     let minute = (zeit % 60);
-
-    console.log(zeit);
+    // console.log(zeit);
     if (stunde >= 0 && stunde < 10) {
         stunde = '0' + stunde
     }
-
     if (minute >= 0 && minute < 10) {
         minute = '0' + minute
     }
-
     if (timeInMin < 0) {
         str = ('-' + stunde + ':' + minute);
         // str.style += 'color: red;'
     } else {
         str = (stunde + ':' + minute);
     }
-
     return str;
 }
+
+/*
+
+document.addEventListener('click', function(e) {
+
+    console.log(e.target.id);
+});*/
+
+$("body").on("click", "tr", function(e){
+    let rowIDclick = e.currentTarget.id
+    console.log(rowIDclick);
+   //$('#' + rowIDclick).style +=  "background-color: gray";
+   $('#' + rowIDclick).css("style", "background-color: lila")
+});

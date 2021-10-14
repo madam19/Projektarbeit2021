@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "./php/functions.php";
+require_once "php/functions.php";
 
 if (isset($_REQUEST['fehler'])) {
     $message = "Bitte Daten prüfen!";
@@ -23,7 +23,7 @@ if (isset($_REQUEST['submit'])) {
     $sql = "SELECT users.email, users.password FROM users WHERE users.email =:email AND users.password =:password";
     $result = getUser($pdo, $sql, $email, $password);
 // eingabe richtig
-    var_dump($result);
+//    var_dump($result);
     if (empty($result)){ // eingabe falsch
         // zurück auf index?fehler
         //  // header mit ?fehler
@@ -33,7 +33,7 @@ if (isset($_REQUEST['submit'])) {
              // $_SESSION setzen
 
         $_SESSION['email'] = $email;
-        $email = $_REQUEST['emailUser'];
+        //$email = $_REQUEST['emailUser'];
 //         connect to Sql
         $pdo = getPdo();
         $sql = "SELECT * FROM users WHERE users.email =:email"; //
