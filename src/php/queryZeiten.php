@@ -9,24 +9,38 @@ $jahr = $_REQUEST['year'];
 
 
 // PDO object
-
 $pdo = getPdo();
 
-//$query = "SELECT from Zeiten where user = ... and datum ="
+
+// query 1: users daten
+$sql1 = "SELECT * FROM users WHERE email = :email"; // userdaten abfragen
+//
+$daten =  getUserData($pdo, $sql1, $email); // ergebnis aus sql1
+
+$result["userdaten"] = $daten;
 
 
-// sql query , kontrol email, ID user and date
-   $sql ="SELECT * FROM zeit, users, arbeitsmodell WHERE users.email = :email AND users.users_ID= zeit.users_ID 
-                                           AND users.AM_ID = arbeitsmodell.AM_ID AND MONTH (zeit.Datum)= :monat AND YEAR(zeit.Datum)  = :jahr
-                                          " ;
+// [
+//    "users_ID" => $daten ->users_ID,
+//    "FamilienName"=>$daten->FamilienName,
+//    "Vorname"=>$daten->Vorname,
+//    "email" => $daten->email,
+//    "personalNR"=>$daten->personalNR,
+//    "Abteilung_ID"=>$daten->Abteilung_ID,
+//    "AM_ID"=>$daten->AM_ID,
+//    "rolles_ID"=>$daten->rolles_ID
+//];
 
-   //$stmt = $pdo->prepare($sql);
 
-        $result = getUserZeiten($pdo, $sql, $email, $monat, $jahr);
+// sql query: email and date
+   $sql2 ="SELECT * FROM zeit, users WHERE users.email = :email AND users.users_ID= zeit.users_ID AND MONTH (zeit.Datum)= :monat AND YEAR(zeit.Datum)  = :jahr";
+
+//$stmt = $pdo->prepare($sql);
+
+        $daten2 = getUserZeiten($pdo, $sql2, $email, $monat, $jahr);
+
+$result["zeiten"] = $daten2;
 // echo ergebnis
-
-//$result = null;
-
 echo json_encode($result);
 
 

@@ -1,3 +1,36 @@
+<?php
+session_start();
+require_once "functions.php";
+
+//$email = $_REQUEST['emailUser'];
+$email = $_SESSION['email'];
+
+//         connect to Sql
+$pdo = getPdo();
+$sql = "SELECT * FROM users, zeit WHERE users.email =:email"; //
+$result = getUserData($pdo, $sql, $email);
+$hidden = "hidden";
+// conect with BD
+//var_dump($result);
+
+echo "<div class='container '><br><h2>" . $result[0]["FamilienName"] . " " . $result[0]["Vorname"] . "<br></h2>";
+echo " Deine email:  " . $result[0]["email"] . "<br>" . " Deine Arbeitsmodell " . $result[0]["AM_ID"] . "<br>";
+echo "<strong><h5> Personal-Nr. " . $result[0] ["personalNR"] . " " . "</h5><br>";
+echo "<h5> Deine Rolle: " . $result[0] ["rolles_ID"] ;
+
+if ($result[0]["rolles_ID"] == "1"){
+    $hidden = "visible";
+};
+$usersArbeitsModel = $result[0]["AM_ID"];
+//    echo $usersID;
+
+$_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
+
+
+// login erfolgreich
+//$_SESSION['authorized'] = true;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,111 +46,35 @@
 </head>
 
 <body style="background-color: lightgray">
-
-<?php
-session_start();
-require_once "functions.php";
-
-
-//$email = $_REQUEST['emailUser'];
-$email = $_SESSION['email'];
-
-//         connect to Sql
-$pdo = getPdo();
-$sql = "SELECT * FROM users, zeit WHERE users.email =:email"; //
-$result = getUserData($pdo, $sql, $email);
-
-// conect with BD
-//var_dump($result);
-
-
-echo "<div class='container '><br><h2>" . $result[0]["FamilienName"] . " " . $result[0]["Vorname"] . "<br></h2>";
-echo " Deine email:  " . $result[0]["email"] . "<br>" . " Deine Arbeitsmodell " . $result[0]["AM_ID"] . "<br>";
-echo "<strong><h5> Personal-Nr. " . $result[0] ["personalNR"] . " " . "</h5><br>";
-if ($result[0]["rolles_ID"]=="2" ){
-    ?>
-    <div class="accordion" id="accordionPanelsStayOpenExample" >
-        <div class="accordion-item" style="background-color: rgba(255, 99, 71, 0.4)">
-            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseOne" style="background-color: rgba(255, 99, 71, 0.4)">
-                    WARNUNGEN
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                 aria-labelledby="panelsStayOpen-headingOne">
-                <div class="accordion-body">
-                   <span>
-                       <strong>Sie haben im vergangenen Zeitraum noch nicht ausgefüllte Daten. </strong>
-                       Bitte tragen Sie die Datum ein.......
-                   </span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container row">
-    <button id="zeituebersicht" type="button" class="btn btn-secondary btn-lg m-3">MonatZeit </button>
-    </div>
-<?php
-} else {
-    echo "<br> Deine Rolle ist: admin. ";
- ?>
-    <div class="accordion" id="accordionPanelsStayOpenExample" >
-        <div class="accordion-item" style="background-color: rgba(255, 99, 71, 0.4)">
-            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseOne" style="background-color: rgba(255, 99, 71, 0.4)">
-                    WARNUNGEN
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                 aria-labelledby="panelsStayOpen-headingOne">
-                <div class="accordion-body">
-                   <span>
-                       <strong>Sie haben im vergangenen Zeitraum noch nicht ausgefüllte Daten. </strong>
-                       Bitte tragen Sie die Datum ein.......
-                   </span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container row">
-
-
-        <button id = "newEmployee" type="button" class="btn btn-secondary btn-lg m-3 " >einen neuen Arbeiter hinzufügen</button>
-        <button type="button" class="btn btn-secondary btn-lg m-3">Kontrolieren Monat </button>
-        <button type="button" class="btn btn-secondary btn-lg m-3" >Jahresbericht </button>
-        <button id="zeituebersicht" type="button" class="btn btn-secondary btn-lg m-3">MonatZeit </button>
-    </div>
-
-<?php
-
-}
-
-
-
-?>
 <!--   warnungen, wenn bis heute keine ausfüllende Daten     -->
+<div class="accordion" id="accordionPanelsStayOpenExample">
+    <div class="accordion-item" style="background-color: rgba(255, 99, 71, 0.4)">
+        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseOne" style="background-color: rgba(255, 99, 71, 0.4)">
+                WARNUNGEN
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+             aria-labelledby="panelsStayOpen-headingOne">
+            <div class="accordion-body">
+                   <span>
+                       <strong>Sie haben im vergangenen Zeitraum noch nicht ausgefüllte Daten. </strong>
+                       Bitte tragen Sie die Datum ein.......
+                   </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container row">
+    <button id="employee" type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Mitarbeiter</button>
+    <button type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Kontrolieren Monat</button>
+    <button type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Jahresbericht</button>
+    <button id="zeituebersicht" type="button" class="btn btn-secondary btn-lg m-3">meine Zeit um Monate</button>
+</div>
 
 
-
-<?php
-
-echo "<br></strong></div>" . "<br>";
-
-$usersID = $result[0]["users_ID"];
-$usersArbeitsModel = $result[0]["AM_ID"];
-//    echo $usersID;
-$_SESSION['users_ID'] = $usersID;
-$_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
-//  echo $usersID;
-//  echo "</div>"
-// login erfolgreich
-//$_SESSION['authorized'] = true;
-
-?>
 
 
 <!-- script now-->
@@ -132,25 +89,32 @@ $_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
 <script>
 
     //setup handlers
-    $("body").on("click", "#zeituebersicht", function(){
+    $("body").on("click", "#zeituebersicht", function () {
         // console.log("zeitenübersicht");
         window.location.assign("zeituebersicht.php");
     });
 
 
-    //add new
-    $("body").on("click", "#newEmployee", function(){
+    //show all employee
+    $("body").on("click", "#employee", function () {
         // console.log("zeitenübersicht");
-        window.location.assign("addNeuMitarbeiter.php");
+        window.location.assign("alleMitarbeiter.php");
+    });
+
+    //exit
+    $("body").on("click", "#raus", function () {
+//         $pdo = null;   //php
+//        session_end();
+        window.location.assign("../index.php");
     });
 
 </script>
 <div class="container">
 
-<!--    $pdo = null;   // Verbindung schliessen-->
-<!--    ?>-->
+    <!--     // Verbindung schliessen-->
+    <!--    ?>-->
     <br>
-    <button id= "exit" type="reset"><a href="../index.php">Raus von here!</a></button>
+    <button id="raus" type="reset">Raus von here!</a></button>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

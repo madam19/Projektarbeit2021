@@ -6,9 +6,9 @@ function getPdo(){
     $user = 'knmde_85';
     $pass = "gM5FGuqWab52QzqT";
 
-    $pdo = new PDO($dsn, $user, $pass);
-    return $pdo;
+    return new PDO($dsn, $user, $pass);
 }
+
 function getUser($pdo, $query, $email, $password)
 {
     /** @var PDO $pdo */
@@ -17,8 +17,17 @@ function getUser($pdo, $query, $email, $password)
         ":email" => $email,
         ":password" => $password
     ]);     // query execution and search
-    $result = $stmt->fetchAll();
-    return $result;
+    return $stmt->fetchAll();
+}
+
+function getAllUser($pdo, $query)
+{
+    /** @var PDO $pdo */
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+
+           ]);     // query execution and search
+    return $stmt->fetchAll();
 }
 
 function getUserData($pdo, $query, $email)
@@ -29,8 +38,7 @@ function getUserData($pdo, $query, $email)
         ":email" => $email
 
     ]);     // query execution and search
-    $result = $stmt->fetchAll();
-    return $result;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 function getUserZeiten($pdo, $query, $email, $monat, $jahr){
 
@@ -41,8 +49,7 @@ function getUserZeiten($pdo, $query, $email, $monat, $jahr){
         ":monat" => $monat,
         ":jahr" => $jahr
     ]);     // query execution and search
-    $result = $stmt->fetchAll();
-    return $result;
+    return $stmt->fetchAll();
 }
 
 

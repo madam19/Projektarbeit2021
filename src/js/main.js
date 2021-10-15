@@ -1,21 +1,23 @@
+// function createHeadTable(headText, table) {
+//     let row = table.insertRow();
+//     // create head table
+//     for (let i = 0; i < headText.length; i++) {
+//         let cell = row.insertCell();
+//         cell.innerHTML = headText[i];
+//         cell.setAttribute('border', '2px');
+//     };
+//     return;
+//
+// }
+
 // fängt "enter" ab und startet "blur" event
 function handleInput(element) {
     if (event.keyCode === 13) {
-             // console.log("enter was pressed");
+        // console.log("enter was pressed");
         element.blur();
 
     }
 }
-
-// bei "blur" sende den wert an das php script
-
-// function sendValue() {
-//     // holt den wert aus input mit id value
-//     let value = $("#month").val();
-//     // ausgabe des wertes in die konsole
-//     // console.log("sending value " + value);
-//     // setData(data, headText, head);
-// }
 
 
 function saveDay() {
@@ -27,23 +29,23 @@ function saveDay() {
     let gehenZeit = row.find(".gehenZeit input").val();
     let pause = row.find(".pause input").val();
     let abwesungsGrund = row.find("select").val();
-    let AB_ID = 1;
-    //wenn hat kommen Zeit und gehen  - keine krenk und urlaub
+    let AB_ID = 1; //abwesungsGrund default - 1 - war bei der Arbeit
 
 
 // kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
-    if (abwesungsGrund == "Urlaub") {
+    if (abwesungsGrund === "Urlaub") {
         AB_ID = 3;
         kommenZeit = "08:00:00";
         gehenZeit = "16:30:00";
         pause = "00:30:00";
-    } else if (abwesungsGrund == "krank") {
+    } else if (abwesungsGrund === "krank") {
         AB_ID = 2;
         kommenZeit = "08:00:00";
         gehenZeit = "16:30:00";
         pause = "00:30:00";
     }
 
+    // console.log();
 
     $.post(
         "../php/sendZeit.php",
@@ -57,26 +59,33 @@ function saveDay() {
 
         },
         function handleResult(result) {
+
             console.log(result);
+            console.log("Datei send");
         }
     );
-    // console.log("Datei send");
+
 
 }
 
 
 function createTable(result, month, year) {
     // console.log(result);
-    let data = JSON.parse(result);
-    //console.log(data);
+    let dataAll = (JSON.parse(result));
+    let data = dataAll["zeiten"];
+    let userdaten = dataAll["userdaten"];
+
+    // console.log(data);
+    // console.log(data.length);
     let controlData = false; // default - new monat
     let akzept = false; //kontrolieren akzept
-
+    console.log(data);
     // kontroll exist data in Db and accept
     if (data.length != 0) {
         controlData = true;
         (data[0]['akzeptiert'] == '1') ? akzept = true : '';//kontrolieren akzept
     }
+
     //building a table by month
     // let head = ["Datum", "Tag", "kommenZeit", "gehenZeit", "pause", "sollStunde", "ISTStunde",
     //     "Saldo", "abwesungsGrund", "GesamtSaldo", "Akzept"];
@@ -106,6 +115,8 @@ function createTable(result, month, year) {
         cell.innerHTML = headText[i];
         cell.setAttribute('border', '2px');
     }
+    ;
+
     //make array Day in this month
     let endMonth = new Date(year, month, 0).getDate(); // number day in this month
     let nowDay = new Date(year, month, 1).getDate(); // 1 day
@@ -122,13 +133,14 @@ function createTable(result, month, year) {
         arrDays [i] = day;
         nowDay++;
     }
+    ;
 
 
     let disabled = akzept ? "disabled" : '';
     let styles = akzept ? "background-color: darkseagreen; color: green;" : "background-color:  #efe1c8; font-weight: bold; color: red;";
     let dayToday;
     let head = new Array();
-    let usersArbeitsModel = data[0]['AM_ID'];
+    let usersArbeitsModel = userdaten['AM_ID'];
 
     //draw  table from days for this month
     for (let i = 1; i < arrDays.length; i++) {
@@ -160,57 +172,69 @@ function createTable(result, month, year) {
 
                     break;
                 case 3: // kommen Zeit
-                    text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+                    if (!akzept) {
+                        text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles +
+                            '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>'
+                    }
+                    ;
 
 
                     break;
                 case 4: // gehenZeit
-                    text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+                    if (!akzept) {
+                        text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" ' +
+                            'value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+                    }
 
 
                     break;
                 case 5: //pause
-                    text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:30" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
-
+                    if (!akzept) {
+                        text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" ' +
+                            'value= "00:30" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+                    }
 
                     break;
                 case 6: //soll Stunde
 // в зависимости от модели работы и дня // depending on working model and day
                     // arbeitModel1 = 20; arbeitModel2 = 37,5; arbeitModel3 = 40;
 
-                    if (usersArbeitsModel == 2 && dayToday == 'Freitag') {
+                    if (usersArbeitsModel == "2" && dayToday == 'Freitag') {
                         text = "05:30";
-                    } else if (usersArbeitsModel == 1) {
+                    } else if (usersArbeitsModel == "1") {
                         text = "04:00"
                     } else {
                         text = "08:00"
                     }
                     ;
+
+
                     break;
 
                 case
                 9
                 :// anwesung Grung wenn gibt's
 
+                    if (!akzept) {
+                        text =
+                            '<select style="width: 90%" data-datum="' + arrDays[i] + '"name="abwendungsGrund" onchange="saveDay()">' +
+                            ' <option value=" " selected> </option>' +
+                            '<option style ="text-align: center" value="krank">krank</option>' +
+                            '<option style ="text-align: center" value="Urlaub">Urlaub</option>'
 
-                    text =
-                        '<select style="width: 90%" data-datum="' + arrDays[i] + '"name="abwendungsGrund" onchange="saveDay()">' +
-                        ' <option value=" " selected> </option>' +
-                        '<option style ="text-align: center" value="krank">krank</option>' +
-                        '<option style ="text-align: center" value="Urlaub">Urlaub</option>'
-
-                    ;
+                        ;
+                    }
 // // kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
 //                     $('#' + rowId + ' [data-id="kommenZeit"]').value = "08:00";
 //                     $('#' + rowId + ' [data-id="gehenZeit"]').value = "16:00";
 
 
-                break;
+                    break;
 
                 case
                 11
                 :// akzeptirt
-                    (controlData) ? text = 'noch nicht' : text = 'akzeptiert';
+                    (akzept) ? text = 'akzeptiert' : text = 'noch nicht';
                     break;
             }
             cell.innerHTML = text;
@@ -221,12 +245,12 @@ function createTable(result, month, year) {
     body.appendChild(table);
 // window.setTimeout(setData, 2000, data, headText, head);
 
-    setData(data, headText, head);
+    setData(data, userdaten, headText, head);
 
 
 }
 
-function setData(data, headText, head) {
+function setData(data, userdaten, headText, head) {
     //sends data from the database
     let saldo = 0;
     let sollStunde;
@@ -273,7 +297,7 @@ function setData(data, headText, head) {
                     break;
                 case 7: // IST Stunde
                     //calculates work time
-                    if (data[i]["abwesungsGrund_Id"] == "2" || data[i]["abwesungsGrund_Id"] == "3") {
+                    if (userdaten["abwesungsGrund_Id"] == "2" || userdaten["abwesungsGrund_Id"] == "3") {
                         istArbeitsZeit = sollStunde;
                     } else {
                         istArbeitsZeit = (gehenZeit - kommenZeit) - pause;
@@ -285,7 +309,7 @@ function setData(data, headText, head) {
                     daySaldo = istArbeitsZeit - sollStunde;  // saldo every day
                     let strSaldo = timeToString(daySaldo);
                     saldo += daySaldo;
-                    if (data[i]["abwesungsGrund_Id"] == "2" || data[i]["abwesungsGrund_Id"] == "3") {
+                    if (userdaten["abwesungsGrund_Id"] == "2" || userdaten["abwesungsGrund_Id"] == "3") {
                         daySaldo = 0;
 
                     }
@@ -348,9 +372,9 @@ document.addEventListener('click', function(e) {
     console.log(e.target.id);
 });*/
 
-$("body").on("click", "tr", function(e){
+$("body").on("click", "tr", function (e) {
     let rowIDclick = e.currentTarget.id
     console.log(rowIDclick);
-   //$('#' + rowIDclick).style +=  "background-color: gray";
-   $('#' + rowIDclick).css("style", "background-color: lila")
+    //$('#' + rowIDclick).style +=  "background-color: gray";
+    $('#' + rowIDclick).css("style", "background-color: lila")
 });

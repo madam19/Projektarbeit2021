@@ -16,7 +16,11 @@ $datum = $_REQUEST['datum'];
 $abwesungsGrundID = $_REQUEST['abwesungsGrundID'];
 $user_Id = $_SESSION['users_ID'];
 
+
 //
+//echo "usersID: ". $user_Id;
+//die();
+
 
 $pdo = getPdo();
 
@@ -38,6 +42,4 @@ die();*/
 
 $result = sendUserZeiten($pdo, $sql, $user_Id, $datum, $kommen, $gehen, $pause, $abwesungsGrundID);
 // echo ergebnis
-// echo $result;
-
-echo json_encode($result);
+ echo json_encode($result);

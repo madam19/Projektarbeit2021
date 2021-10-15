@@ -7,12 +7,15 @@ $pdo = getPdo();
 $sql = "SELECT * FROM users, zeit WHERE users.email =:email"; //
 $result = getUserData($pdo, $sql, $email);
 
+
 echo "<div class='container '><br><h2>" . $result[0]["FamilienName"] . " " . $result[0]["Vorname"] . "<br></h2>";
 echo " Deine email:  " . $result[0]["email"] . "<br>" . " Deine Arbeitsmodell " . $result[0]["AM_ID"] . "<br>";
 echo "<strong><h5> Personal-Nr. " . $result[0] ["personalNR"] . " " . "</h5><br>";
 
 
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,6 +56,10 @@ echo "<strong><h5> Personal-Nr. " . $result[0] ["personalNR"] . " " . "</h5><br>
                 let url = "../php/queryZeiten.php";  // das php script liegt hier
 
                 //
+                // console.log("MONTH: " + month );
+                // console.log("YEAR: " + year );
+
+                //
                 $.post(
                     url,
                     {
@@ -60,6 +67,9 @@ echo "<strong><h5> Personal-Nr. " . $result[0] ["personalNR"] . " " . "</h5><br>
                         year: year
                     },
                     function handler(result) {
+                        // console.log("handler in ok click, result: ");
+                        // console.log(result);
+                        // let data = (JSON.parse(result));
                         createTable(result, month, year);
                     }
                 );
