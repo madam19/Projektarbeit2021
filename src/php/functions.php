@@ -25,7 +25,7 @@ function getAllUser($pdo, $query)
 {
   /** @var PDO $pdo */
   $stmt = $pdo->prepare($query);
-  $stmt->execute([]);     // query execution and search
+  $stmt->execute();     // query execution and search
   return $stmt->fetchAll();
 }
 
@@ -82,4 +82,15 @@ function getMonthData($pdo, $sql, $monat, $jahr)
   ]);     // query execution and search
   $result = $stmt->fetchAll();
   return $result;
+}
+
+function getSectionUser ($pdo, $sql, $abteilung)
+{
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ":abteilung" => $abteilung
+    ]);     // query execution and search
+    $result = $stmt->fetchAll();
+    return $result;
 }

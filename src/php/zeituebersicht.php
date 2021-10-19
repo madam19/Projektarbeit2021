@@ -89,11 +89,7 @@ echo "<strong><h5> Personal-Nr. " . $result[0]["personalNR"] . " " . "</h5><br>"
         },
         function handler(result) {
           createTable(result, month, year);
-
-
-        })
-
-
+ })
     });
     $("body").on("click", "#reset", function() {
       window.location.assign("mydata.php");

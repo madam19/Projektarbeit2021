@@ -1,16 +1,3 @@
-// function createHeadTable(headText, table) {
-//     let row = table.insertRow();
-//     // create head table
-//     for (let i = 0; i < headText.length; i++) {
-//         let cell = row.insertCell();
-//         cell.innerHTML = headText[i];
-//         cell.setAttribute('border', '2px');
-//     };
-//     return;
-//
-// }
-
-// fängt "enter" ab und startet "blur" event
 function handleInput(element) {
     if (event.keyCode === 13) {
         // console.log("enter was pressed");
@@ -79,7 +66,7 @@ function createTable(result, month, year) {
     // console.log(data.length);
     let controlData = false; // default - new monat
     let akzept = false; //kontrolieren akzept
-    console.log(data);
+    // console.log(data);
     // kontroll exist data in Db and accept
     if (data.length != 0) {
         controlData = true;
@@ -99,8 +86,7 @@ function createTable(result, month, year) {
 
     let body = document.body,
         table = document.createElement("table");
-    //$('table').empty(); //remove table, if had
-    //  document.body.innerHTML = "";
+
     let styleTable = 'width: 100%; text-align: center;';
     table.className = 'table table-secondary table-bordered caption-top align-center';
 
@@ -144,7 +130,7 @@ function createTable(result, month, year) {
 
     //draw  table from days for this month
     for (let i = 1; i < arrDays.length; i++) {
-        row = table.insertRow();  // ellement array day - row
+        row = table.insertRow();  // element array day - row
         row.id = arrDays[i];
 
 
@@ -317,30 +303,23 @@ function setData(data, userdaten, headText, head) {
 
                     break;
                 case 9: //abwesung Grund // расчитывается в зависимости от значения AM_ID
-// kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
+                    // kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
 
                     if (head[j] == "abwesungsGrund" && data[i]["abwesungsGrund_Id"] == "2") {
                         $('#' + rowId + ' select ').val("krank");
 
                     } else if (head[j] == "abwesungsGrund" && data[i]["abwesungsGrund_Id"] == "3") {
                         $('#' + rowId + ' select ').val("Urlaub");
-
-
                     }
                     break;
                 case 10:
-
                     // console.log(saldo);
-
                     let strGS = timeToString(saldo)
                     $('#' + rowId + ' .' + head[j]).text(strGS).val();
                     break;
             }
         }
-
     }
-
-
 } //end function setData
 
 function timeToString(timeInMin) {
@@ -365,12 +344,6 @@ function timeToString(timeInMin) {
     return str;
 }
 
-/*
-
-document.addEventListener('click', function(e) {
-
-    console.log(e.target.id);
-});*/
 
 $("body").on("click", "tr", function (e) {
     let rowIDclick = e.currentTarget.id
@@ -378,3 +351,38 @@ $("body").on("click", "tr", function (e) {
     //$('#' + rowIDclick).style +=  "background-color: gray";
     $('#' + rowIDclick).css("style", "background-color: lila")
 });
+
+
+function createTableMitarbeiter(result) {
+    // create new table with this department
+
+    let data = JSON.parse(result);
+    $('body').remove('table'); //clear table
+
+    let body = document.body,
+        table = document.createElement("table");  //create new table
+    table.className = 'table table-info table-striped table-bordered';
+    let row = table.insertRow();  //create new row
+    let cell = row.insertCell(); //create new cell
+    // create head table
+    let headText = ["User_ID", "FamilienName", "Vorname", "Personal Nummer", "Abteilung", "Arbeitsmodel", "stunde pro Woche", "Rolles", "Korrigieren"];
+    for (let i = 1; i < headText.length; i++) {
+       cell.innerHTML = headText[i];
+       // cell.setAttribute('border', '2px');
+    };
+        // create new table with this departament
+
+    // console.log(data);
+    for (let i = 0; i < data.length; i++) {
+        row = table.insertRow();
+        for (let j = 0; j < headText[j]; j++) {
+            // cell = row.insertCell();
+            // cell.innerHTML = data[i][headText[j]].val();
+            console.log(data[i][headText[j]].val());
+
+        }
+    }
+    body.appendChild(table);
+
+};
+
