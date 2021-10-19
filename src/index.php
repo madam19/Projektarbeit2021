@@ -32,8 +32,8 @@ if (isset($_REQUEST['submit'])) {
     // $_SESSION setzen
     $_SESSION['email'] = $email;
     $_SESSION['users_ID'] = $result[0]['users_ID'];
-    var_dump($email);
-    var_dump($_SESSION['users_ID']);
+    //var_dump($email);
+   // var_dump($_SESSION['users_ID']);
     //$email = $_REQUEST['emailUser'];
     //         connect to Sql
     $pdo = getPdo();

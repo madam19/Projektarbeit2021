@@ -1,4 +1,8 @@
 <?php
+session_start();
+require_once "functions.php";
+var_dump($_REQUEST['id']);
+
 
 ?>
 
@@ -14,7 +18,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossOrigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="../js/main.js"></script>
-  <title>AddNeuMitarbeiter</title>
+  <title>KorregierenMitarbeiter</title>
 </head>
 
 <body>
@@ -22,9 +26,6 @@
 
   <!-- такие же поля как и в добавить, только с получение данных с сервера
  -->
-  <button type="reset"><a href="alleMitarbeiter.php">Zuruck</a></button>
-  <button id="saveData" type="button" class="btn btn-secondary btn-lg m-3 ">Speichern</button>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
   <body style="background-color: lightgray">
   <div class="container pt-5">
@@ -86,9 +87,10 @@
 
           <label class="input-group-text" for="inputGroupSelect01">Abteilung</label>
           <select class="form-select" id="inputGroupSelect01">
-              <option value="1">Personalabteilung</option>
-              <option value="2" selected>IT</option>
 
+              <option value="1">Personalabteilung</option>
+              <option value="2">Entwicklung</option>
+              <option value="2">Grafik</option>
           </select>
 
 
@@ -102,7 +104,18 @@
   </div>
 
   <script>
+      console.log(user_ID);
 
+      $.post(
+          "emendEmlployee.php", {
+              user_ID: user_ID
+          },
+          function handler(result) {
+              // console.log("handler in ok click, result: ");
+              // console.log(result);
+              // let data = (JSON.parse(result));
+
+          })
 
   </script>
 

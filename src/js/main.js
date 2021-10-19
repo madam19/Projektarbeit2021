@@ -360,11 +360,12 @@ function createTableMitarbeiter(result) {
     $("#tableEmployee tbody").empty(); //clear table
     let table = $("#tableEmployee");
     let tbody = document.createElement("tbody");
-    let headText = ["users_ID", "FamilienName", "Vorname", "PersonalNR", "abteilung", "arbeitsmodell", "stunden", "rolle"];
+    let headText = ["users_ID", "FamilienName", "Vorname", "personalNR","email", "abteilung", "arbeitsmodell", "stunden", "rolle"];
 //create new table with this departament
-    //console.log(data);
+    console.log(data);
     for (let i = 0; i < data.length; i++) {
         let row = tbody.insertRow();
+        // row.id = data[i]["email"];
         for (let j = 0; j < headText.length; j++) {
             let cell = row.insertCell();
             cell.innerHTML = data[i][headText[j]];
@@ -372,16 +373,9 @@ function createTableMitarbeiter(result) {
             // console.log(data[i][headText[j]].val());
         }
 
-        row.insertCell().innerHTML = "<img id=\"emend\" src=\"../image/icons-blue.png\" alt=\"korrigieren\" style=\"width: 30px\">\n";
+        row.insertCell().innerHTML = "<a href=\"korrigierenMitarbeiter.php?id=" + data[i]['users_ID'] + "\"><img id=\"emend\" src=\"../image/icons-blue.png\" alt=\"korrigieren\" style=\"width: 30px\"></a>\n";
         //
     }
     table.append(tbody);
 
-}
-function add_img() {
-    let img = document.createElement('img');
-    img.src = "../image/icons-blue.png";
-    img.id = "#emend";
-    img.style = "alt='korrigieren' style='width: 30px'" ;
-    $('#emend').append(img);
 }

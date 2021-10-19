@@ -49,6 +49,7 @@ $result = getAllUser($pdo, $sql);
             <td class="table-info">FamilienName</td>
             <td class="table-info">Vorname</td>
             <td class="table-info">Personal Nummer</td>
+            <td class="table-info">email</td>
             <td class="table-info">Abteilung</td>
             <td class="table-info">Arbeitsmodel</td>
             <td class="table-info">stunde pro Woche</td>
@@ -57,33 +58,22 @@ $result = getAllUser($pdo, $sql);
         </tr>
         </thead>
 
-        <?php
-        for ($i = 0; $i < count($result); $i++) {
-            ?>
-            <tr id="bodytable">
-                <td><?php echo $result[$i]["users_ID"]; ?></td>
-                <td><?= $result[$i]["FamilienName"]; ?></td>
-                <td><?= $result[$i]["Vorname"]; ?></td>
-                <td><?= $result[$i]["personalNR"]; ?></td>
-                <td><?= $result[$i]["abteilung"]; ?></td>
-                <td><?= $result[$i]["arbeitsmodell"]; ?></td>
-                <td><?= $result[$i]["rolle"]; ?></td>
-                <td><?= $result[$i]["stunden"]; ?></td>
-                <td >
-
-                        <img id="emend" src="../image/icons-blue.png" alt="korrigieren" style="width: 30px">
-
-
-                </td>
-            </tr>
-        <?php }
-
-
-        ?>
 
     </table>
     <script>
+        $(document).ready(function () {
+                $.post(
+                    "queryEmployee.php",
+                    {
+                        abteilung: "0"
+                    },
+                    function handler(result) {
+                        createTableMitarbeiter(result);
+                    })
+            }
+        )
 
+        // createTableMitarbeiter(result);
 
         $("#selectAbteilung").change(function () {
             let abteilung = $("#selectAbteilung").val();
@@ -94,9 +84,9 @@ $result = getAllUser($pdo, $sql);
                 {
                     abteilung: abteilung
                 },
-                function handler (result){
+                function handler(result) {
                     createTableMitarbeiter(result);
-                                   })
+                })
 
         });
 
@@ -107,9 +97,10 @@ $result = getAllUser($pdo, $sql);
         });
 
         //correct employee
-        $("body").on("click", "#emend", function () {
-
-            window.location.assign("korregierenMitarbeiter.php");
+        $("body").on("click", "#emend", function (e) {
+            let user_ID = $(this).parent;
+            // alert(user_ID);
+            window.location.assign("korregierenMitarbeiter.php?id=" + user_ID);
 
         });
     </script>
@@ -117,7 +108,6 @@ $result = getAllUser($pdo, $sql);
     <button type="reset"><a href="mydata.php">Zuruck</a></button>
     <button id="neuEmployee" type="button" class="btn btn-secondary btn-lg m-3 ">neuen Mitarbeiter hinzufügen</button>
 </div>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

@@ -75,8 +75,10 @@
 
         <label class="input-group-text" for="inputGroupSelect01">Abteilung</label>
         <select class="form-select" id="inputGroupSelect01">
+
             <option value="1">Personalabteilung</option>
-            <option value="2" selected>IT</option>
+            <option value="2">Entwicklung</option>
+            <option value="2">Grafik</option>
 
         </select>
 
