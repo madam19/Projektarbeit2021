@@ -379,3 +379,6 @@ function createTableMitarbeiter(result) {
     table.append(tbody);
 
 }
+function setDataUserInTabelle(result){
+
+}

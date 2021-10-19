@@ -100,7 +100,7 @@ $result = getAllUser($pdo, $sql);
         $("body").on("click", "#emend", function (e) {
             let user_ID = $(this).parent;
             // alert(user_ID);
-            window.location.assign("korregierenMitarbeiter.php?id=" + user_ID);
+            window.location.assign("korrigierenMitarbeiter.php?id=" + user_ID);
 
         });
     </script>

@@ -1,9 +1,18 @@
 <?php
 session_start();
 require_once "functions.php";
-var_dump($_REQUEST['id']);
+//var_dump($_REQUEST['id']);
+$users_ID = $_REQUEST['id'];
+if (isset($_REQUEST['id'])) {
+    $pdo = getPdo();
+    $sql = "SELECT users.users_ID, users.FamilienName, users.Vorname, users.email, users.password, users.personalNR, arbeitsmodell.stundenWoche AS 'stunden',
+users.AM_ID, arbeitsmodell.AM_Name AS 'arbeitsmodell', rolles.rollesName AS 'rolle', abteilung.NameAbteilung AS 'abteilung' FROM users, arbeitsmodell, rolles, abteilung
+WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.Abteilung_ID=abteilung.Abteilung_ID AND users.rolles_ID=rolles.rolles_ID";
+    // get data this users
 
 
+    $result = getUserDataID($pdo, $sql, $users_ID);
+}
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +27,7 @@ var_dump($_REQUEST['id']);
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossOrigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="../js/main.js"></script>
-  <title>KorregierenMitarbeiter</title>
+  <title>KorrigierenMitarbeiter</title>
 </head>
 
 <body>
@@ -33,30 +42,30 @@ var_dump($_REQUEST['id']);
       <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">FamilienName</span>
           <input type="text" class="form-control" placeholder="FamilienName" aria-label="Username"
-                 aria-describedby="basic-addon1">
+                 aria-describedby="basic-addon1" value="<?=$result[0]['FamilienName'] ?> ">
       </div>
 
       <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">VorName</span>
           <input type="text" class="form-control" placeholder="Vorname" aria-label="Username"
-                 aria-describedby="basic-addon1">
+                 aria-describedby="basic-addon1" value="<?=$result[0]['Vorname'] ?> ">
       </div>
 
       <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">email</span>
           <input type="text" class="form-control" placeholder="Name_Vorname" aria-label="emailUser"
-                 aria-describedby="basic-addon2">
-          <span class="input-group-text" id="basic-addon2">@krammerinnovation.de</span>
+                 aria-describedby="basic-addon2" value="<?=$result[0]['email'] ?> ">
+
       </div>
 
       <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">password</span>
           <input type="text" class="form-control" placeholder="password" aria-label="emailUser"
-                 aria-describedby="basic-addon2">
+                 aria-describedby="basic-addon2" value="<?=$result[0]['password'] ?> ">
 
       </div>
 
-
+<!--  if get arbeitsmodel, soll select-->
       <div class="input-group mb-3">
           <label class="input-group-text" for="inputGroupSelect01">arbeitsmodel</label>
           <select class="form-select" id="inputGroupSelect01">
@@ -67,24 +76,23 @@ var_dump($_REQUEST['id']);
           </select>
       </div>
 
-
+      <!--  if admin, soll select -->
       <div class="input-group mb-3 end">
           <div class="input-group-text">
               <input class="form-check-input mt-0" type="checkbox" value="2" aria-label="user">
           </div>
-          <span class="input-group-text" id="basic-addon2">admin </span>
+          <span class="input-group-text" id="basic-addon2">admin</span>
 
       </div>
 
       <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">PersonalNummer</span>
           <input type="text" class="form-control" placeholder="12345" aria-label="personalNR"
-                 aria-describedby="basic-addon1">
+                 aria-describedby="basic-addon1" value="<?=$result[0]['personalNR'] ?> ">
       </div>
 
       <div class="input-group mb-3">
-
-
+          <!--  if get departament, soll selected-->
           <label class="input-group-text" for="inputGroupSelect01">Abteilung</label>
           <select class="form-select" id="inputGroupSelect01">
 
@@ -104,18 +112,18 @@ var_dump($_REQUEST['id']);
   </div>
 
   <script>
-      console.log(user_ID);
 
-      $.post(
-          "emendEmlployee.php", {
-              user_ID: user_ID
-          },
-          function handler(result) {
-              // console.log("handler in ok click, result: ");
-              // console.log(result);
-              // let data = (JSON.parse(result));
+// if click on input or speicern - sollen speichern Data in BD
 
-          })
+      // $.post(
+      //     "emendEmployee.php", {
+      //
+      //     },
+      //     function handler(result) {
+      //         console.log(result);
+      //       // setDataUserInTabelle(result) ;
+      //
+      //     })
 
   </script>
 

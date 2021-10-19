@@ -39,6 +39,19 @@ function getUserData($pdo, $query, $email)
   ]);     // query execution and search
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getUserDataID($pdo, $query, $users_ID)
+{
+    /** @var PDO $pdo */
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        ":users_ID" => $users_ID
+
+    ]);     // query execution and search
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 function getUserZeiten($pdo, $query, $email, $monat, $jahr)
 {
 
