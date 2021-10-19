@@ -357,32 +357,31 @@ function createTableMitarbeiter(result) {
     // create new table with this department
 
     let data = JSON.parse(result);
-    $('body').remove('table'); //clear table
-
-    let body = document.body,
-        table = document.createElement("table");  //create new table
-    table.className = 'table table-info table-striped table-bordered';
-    let row = table.insertRow();  //create new row
-    let cell = row.insertCell(); //create new cell
-    // create head table
-    let headText = ["User_ID", "FamilienName", "Vorname", "Personal Nummer", "Abteilung", "Arbeitsmodel", "stunde pro Woche", "Rolles", "Korrigieren"];
-    for (let i = 1; i < headText.length; i++) {
-       cell.innerHTML = headText[i];
-       // cell.setAttribute('border', '2px');
-    };
-        // create new table with this departament
-
-    // console.log(data);
+    $("#tableEmployee tbody").empty(); //clear table
+    let table = $("#tableEmployee");
+    let tbody = document.createElement("tbody");
+    let headText = ["users_ID", "FamilienName", "Vorname", "PersonalNR", "abteilung", "arbeitsmodell", "stunden", "rolle"];
+//create new table with this departament
+    //console.log(data);
     for (let i = 0; i < data.length; i++) {
-        row = table.insertRow();
-        for (let j = 0; j < headText[j]; j++) {
-            // cell = row.insertCell();
-            // cell.innerHTML = data[i][headText[j]].val();
-            console.log(data[i][headText[j]].val());
-
+        let row = tbody.insertRow();
+        for (let j = 0; j < headText.length; j++) {
+            let cell = row.insertCell();
+            cell.innerHTML = data[i][headText[j]];
+            // console.log(data[i][headText[j]]);
+            // console.log(data[i][headText[j]].val());
         }
+
+        row.insertCell().innerHTML = "<img id=\"emend\" src=\"../image/icons-blue.png\" alt=\"korrigieren\" style=\"width: 30px\">\n";
+        //
     }
-    body.appendChild(table);
+    table.append(tbody);
 
-};
-
+}
+function add_img() {
+    let img = document.createElement('img');
+    img.src = "../image/icons-blue.png";
+    img.id = "#emend";
+    img.style = "alt='korrigieren' style='width: 30px'" ;
+    $('#emend').append(img);
+}

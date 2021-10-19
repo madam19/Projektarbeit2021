@@ -8,9 +8,9 @@ $sql = "SELECT users.users_ID, users.FamilienName, users.Vorname, users.email, u
 users.AM_ID, arbeitsmodell.AM_Name AS 'arbeitsmodell', rolles.rollesName AS 'rolle', abteilung.NameAbteilung AS 'abteilung' FROM users, arbeitsmodell, rolles, abteilung
 WHERE arbeitsmodell.AM_ID=users.AM_ID AND users.Abteilung_ID=abteilung.Abteilung_ID AND users.rolles_ID=rolles.rolles_ID;"; // get all users
 $result = getAllUser($pdo, $sql);
-//var_dump($result[0]);
-//
-
+//var_dump($result);
+// !wahrscheinlich bekommen wir abteilung von BD
+//$departament =
 ?>
 
 <!DOCTYPE html>
@@ -37,7 +37,8 @@ $result = getAllUser($pdo, $sql);
         <select class="form-select" id="selectAbteilung">
             <option value="0" selected>Alle</option>
             <option value="1">Personalabteilung</option>
-            <option value="2">IT</option>
+            <option value="2">Entwicklung</option>
+            <option value="2">Grafik</option>
         </select>
     </div>
 
@@ -68,10 +69,10 @@ $result = getAllUser($pdo, $sql);
                 <td><?= $result[$i]["arbeitsmodell"]; ?></td>
                 <td><?= $result[$i]["rolle"]; ?></td>
                 <td><?= $result[$i]["stunden"]; ?></td>
-                <td>
-                    <div id="emend">
-                        <img src="../image/icons-blue.png" alt="korrigieren" style="width: 30px;">
-                    </div>
+                <td >
+
+                        <img id="emend" src="../image/icons-blue.png" alt="korrigieren" style="width: 30px">
+
 
                 </td>
             </tr>
@@ -112,6 +113,7 @@ $result = getAllUser($pdo, $sql);
 
         });
     </script>
+
     <button type="reset"><a href="mydata.php">Zuruck</a></button>
     <button id="neuEmployee" type="button" class="btn btn-secondary btn-lg m-3 ">neuen Mitarbeiter hinzufügen</button>
 </div>
