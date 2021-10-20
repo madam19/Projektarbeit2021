@@ -93,7 +93,7 @@ $result = getAllUser($pdo, $sql);
         //add new employee
         $("body").on("click", "#neuEmployee", function () {
 
-            window.location.assign("addNeuMitarbeiter.php");
+            window.location.assign("korrigierenMitarbeiter.php?new");
         });
 
         //correct employee

@@ -369,7 +369,8 @@ function createTableMitarbeiter(result) {
         for (let j = 0; j < headText.length; j++) {
             let cell = row.insertCell();
             cell.innerHTML = data[i][headText[j]];
-            // console.log(data[i][headText[j]]);
+
+            //  if ([headText[j]]=="rolle"){console.log(data[i][headText[j]]);}
             // console.log(data[i][headText[j]].val());
         }
 
