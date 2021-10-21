@@ -10,6 +10,7 @@ $personalNR = $_REQUEST['personalNR'] ?? "";
 $Abteilung = $_REQUEST['abteilung'] ?? "";
 $arbeitsModell = $_REQUEST['ArbeitsModell'] ?? "3";
 
+
 if (isset($_REQUEST['rolles']) && $_REQUEST['rolles']=="on")
 {
     $rolles ="1";
@@ -31,7 +32,20 @@ if ($users_ID === "") {
     echo "updating";
 };
 // get data this users
-
 //echo "</pre>";
+//get all Data for tabelle usersArbeitszeit
+
+$FamilienName = $_REQUEST['FamilienName'] ?? "";
+$Vorname = $_REQUEST['Vorname'] ?? "";
+$email = $_REQUEST['email'] ?? "";
+$password = $_REQUEST['password'] ?? "";
+$personalNR = $_REQUEST['personalNR'] ?? "";
+$Abteilung = $_REQUEST['abteilung'] ?? "";
+
+
+
+
+
+
 
 header('Location: http://localhost:8080/Projektarbeit2021/src/php/alleMitarbeiter.php');

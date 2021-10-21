@@ -105,18 +105,71 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
                 }
 
                 ?>
-
-
             </select>
+            <label id = "summaTimeAllDay" class="input-group-text" for="inputSelectArbeitsModell"></label>
         </div>
+        <!--  users_arbeitsmodell per WochenTag-->
 
+        <div class="input-group mb-3">
+
+            <table class="table table-primary table-striped table-active table-bordered border-primary">
+                <thead>
+                <tr class="table-primary">
+                    <td class="table-primary">
+                        <label class="table-primary" for="inputMontag">Montag</label>
+                    </td>
+                    <td class="table-primary">
+                        <label class="table-primary" for="inputDienstag">Dienstag</label>
+                    </td>
+                    <td class="table-primary">
+                        <label class="table-primary" for="inputMittwoch">Mittwoch</label>
+                    </td>
+                    <td class="table-primary">
+                        <label class="table-primary" for="inputDonnerstag">Donnerstag</label>
+                    </td>
+                    <td class="table-primary">
+                        <label class="table-primary" for="inputFreitag">Freitag</label>
+                    </td>
+                </thead>
+                <tbody>
+                <tr class="table-primary">
+                    <td class="table-primary">
+                        <input id="inputMontag" type="time" class="form-control" placeholder="Montag" aria-label="Montag"
+                               aria-describedby="basic-addon2" name="Montag" value="08:00">
+                                               </td>
+                    <td class="table-primary">
+                        <input id="inputDienstag" type="time" class="form-control" placeholder="Dienstag" aria-label="Dienstag"
+                               aria-describedby="basic-addon2" name="Montag" value="08:00">
+                       </td>
+                    <td class="table-primary">
+                        <input id="inputMittwoch" type="time" class="form-control" placeholder="Mittwoch" aria-label="Mittwoch"
+                               aria-describedby="basic-addon2" name="Mittwoch" value="08:00">
+                        </td>
+                    <td class="table-primary">
+                        <input id="inputDonnerstag" type="time" class="form-control" placeholder="Donnerstag" aria-label="Donnerstag"
+                               aria-describedby="basic-addon2" name="Donnerstag" value="08:00">
+                        </td>
+                    <td class="table-primary">
+                        <input id="inputFreitag" type="time" class="form-control" placeholder="Freitag" aria-label="Freitag"
+                               aria-describedby="basic-addon2" name="Freitag" value="05:30">
+                        </td>
+                </tr>
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
         <!--  if admin, soll select -->
         <div class="input-group mb-3 end">
             <div class="input-group-text">
                 <input id="rolles" class="form-check-input mt-0" type="checkbox" name="rolles"
                     <?php if (isset($result[0]["rolles_ID"]) && $result[0]["rolles_ID"] == "1") {
-                        echo "checked"; $rolles = "1";
-                    }  ?>
+                        echo "checked";
+                        $rolles = "1";
+                    } ?>
                        aria-label="user">
             </div>
             <span class="input-group-text" id="basic-addon2">admin</span>
