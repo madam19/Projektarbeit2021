@@ -2,7 +2,7 @@ function handleInput(element) {
     if (event.keyCode === 13) {
         // console.log("enter was pressed");
         element.blur();
-
+        saveDay();
     }
 }
 
@@ -32,10 +32,11 @@ function saveDay() {
         pause = "00:30:00";
     }
 
-    // console.log();
+   console.log(kommenZeit, gehenZeit, pause, AB_ID);
+    let url = "../php/sendZeit.php";
 
     $.post(
-        "../php/sendZeit.php",
+        url,
         {
             kommenZeit: kommenZeit,
             gehenZeit: gehenZeit,
@@ -43,12 +44,11 @@ function saveDay() {
             pause: pause,
             abwesungsGrundID: AB_ID
 
-
         },
         function handleResult(result) {
 
-            console.log(result);
-            console.log("Datei send");
+         console.log(result);
+           // console.log("Datei send");
         }
     );
 
@@ -159,27 +159,21 @@ function createTable(result, month, year) {
                     break;
                 case 3: // kommen Zeit
                     if (!akzept) {
-                        text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles +
-                            '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>'
+                        text = '<input data-id="kommenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>'
                     }
                     ;
-
 
                     break;
                 case 4: // gehenZeit
                     if (!akzept) {
-                        text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" ' +
-                            'value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+                        text = '<input data-id="gehenZeit" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" ' + 'value= "00:00" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
                     }
-
 
                     break;
                 case 5: //pause
                     if (!akzept) {
-                        text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" ' +
-                            'value= "00:30" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
+                        text = '<input data-id="pause" data-datum="' + arrDays[i] + '" type="time" name="$str" style= "' + styles + '" ' + 'value= "00:30" onkeydown="handleInput(this)" onblur="saveDay()"' + disabled + '>';
                     }
-
                     break;
                 case 6: //soll Stunde
 // в зависимости от модели работы и дня // depending on working model and day
@@ -193,8 +187,6 @@ function createTable(result, month, year) {
                         text = "08:00"
                     }
                     ;
-
-
                     break;
 
                 case
@@ -207,14 +199,8 @@ function createTable(result, month, year) {
                             ' <option value=" " selected> </option>' +
                             '<option style ="text-align: center" value="krank">krank</option>' +
                             '<option style ="text-align: center" value="Urlaub">Urlaub</option>'
-
                         ;
                     }
-// // kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
-//                     $('#' + rowId + ' [data-id="kommenZeit"]').value = "08:00";
-//                     $('#' + rowId + ' [data-id="gehenZeit"]').value = "16:00";
-
-
                     break;
 
                 case
@@ -239,7 +225,7 @@ function createTable(result, month, year) {
 function setData(data, userdaten, headText, head) {
     //sends data from the database
     let saldo = 0;
-    let sollStunde;
+// console.log(data);
     for (let i = 0; i < data.length; i++) {
         let rowId = data[i]['Datum'];
         let kommenZeit = 0, gehenZeit = 0, pause = 0, istArbeitsZeit = 0, sollStunde = 0;
@@ -247,17 +233,14 @@ function setData(data, userdaten, headText, head) {
         for (let j = 3; j < headText.length; j++) {
             let daySaldo = 0;
             $('#' + rowId + ' [data-id="' + head[j] + '"]').val(data[i][head[j]]);
-// console.log('#' + rowId + ' [data-id="' + head[j] + '"]');
+            //            console.log('#' + rowId + ' [data-id="' + head[j] + '"]');
 
             switch (j) {
                 case 3 : //kommen Zeit
-
                     let strk = new Date(rowId + ' ' + data[i][head[j]]); //.split('-');
                     // console.log(rowId + ' ' + data[i][head[j]]);
-
                     kommenZeit = strk.getTime() / 1000 / 60; // time in min
                     // console.log("kommenZeit: " + kommenZeit);
-
                     break;
                 case 4: //gehenZeit
                     let strg = new Date(rowId + ' ' + data[i][head[j]]); //.split('-');
@@ -283,7 +266,7 @@ function setData(data, userdaten, headText, head) {
                     break;
                 case 7: // IST Stunde
                     //calculates work time
-                    if (userdaten["abwesungsGrund_Id"] == "2" || userdaten["abwesungsGrund_Id"] == "3") {
+                    if (userdaten["abwesungsGrund_Id"] === "2" || userdaten["abwesungsGrund_Id"] === "3") {
                         istArbeitsZeit = sollStunde;
                     } else {
                         istArbeitsZeit = (gehenZeit - kommenZeit) - pause;
@@ -304,7 +287,7 @@ function setData(data, userdaten, headText, head) {
                     break;
                 case 9: //abwesung Grund // расчитывается в зависимости от значения AM_ID
                     // kontroll "AbwesungsGrund" wenn urlaub oder krank  - kommen und gehen zeit default
-
+                    // console.log($('#' + rowId + ' select ').val());
                     if (head[j] == "abwesungsGrund" && data[i]["abwesungsGrund_Id"] == "2") {
                         $('#' + rowId + ' select ').val("krank");
 
@@ -314,7 +297,7 @@ function setData(data, userdaten, headText, head) {
                     break;
                 case 10:
                     // console.log(saldo);
-                    let strGS = timeToString(saldo)
+                    let strGS = timeToString(saldo);
                     $('#' + rowId + ' .' + head[j]).text(strGS).val();
                     break;
             }
@@ -344,25 +327,30 @@ function timeToString(timeInMin) {
     return str;
 }
 
+// function highlighting a row in a table
 
-$("body").on("click", "tr", function (e) {
-    let rowIDclick = e.currentTarget.id
-    console.log(rowIDclick);
-    //$('#' + rowIDclick).style +=  "background-color: gray";
-    $('#' + rowIDclick).css("style", "background-color: lila")
-});
+// $("body").on("click", "tr", function (e) {
+//     let rowIDclick = e.currentTarget.id
+//     // console.log(rowIDclick);
+//     //$('#' + rowIDclick).style +=  "background-color: gray";
+//     $('#' + rowIDclick).style="background-color: lila";
+// });
 
 
 function createTableMitarbeiter(result) {
     // create new table with this department
-
+    // console.log(result);
     let data = JSON.parse(result);
     $("#tableEmployee tbody").empty(); //clear table
     let table = $("#tableEmployee");
     let tbody = document.createElement("tbody");
-    let headText = ["users_ID", "FamilienName", "Vorname", "personalNR","email", "abteilung", "arbeitsmodell", "stunden", "rolle"];
+    let headText = ["users_ID", "FamilienName", "Vorname", "personalNR", "email", "abteilung", "arbeitsmodell", "stunden", "rolle"];
 //create new table with this departament
     console.log(data);
+    // function sort all data by users_ID
+    data.sort(function (a, b) {
+        return a['users_ID'] - b['users_ID'];
+    });
     for (let i = 0; i < data.length; i++) {
         let row = tbody.insertRow();
         // row.id = data[i]["email"];
@@ -373,13 +361,19 @@ function createTableMitarbeiter(result) {
             //  if ([headText[j]]=="rolle"){console.log(data[i][headText[j]]);}
             // console.log(data[i][headText[j]].val());
         }
-
         row.insertCell().innerHTML = "<a href=\"korrigierenMitarbeiter.php?id=" + data[i]['users_ID'] + "\"><img id=\"emend\" src=\"../image/icons-blue.png\" alt=\"korrigieren\" style=\"width: 30px\"></a>\n";
         //
     }
     table.append(tbody);
 
 }
-function setDataUserInTabelle(result){
+
+function createMonthTable(result, month, year) {
+    let data = (JSON.parse(result));
+    $("#tableEmployeeMonth tbody").empty(); //clear table
+    let table = $("#tableEmployeeMonth");
+    let tbody = document.createElement("tbody");
+    let headText = ["Mitarbeiter", "Personal Nummer", "Abteilung", "arbeitsmodell", "Gesamt SOLL Stunde", "Gesamt IST Stunde","Gesamt Saldo", "Krank Tagen pro Monat", "Urlaub Tage", "Anwesendheit Tage","email", "Senden email" ];
+
 
 }

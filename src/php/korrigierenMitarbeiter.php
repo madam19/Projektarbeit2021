@@ -2,7 +2,8 @@
 session_start();
 require_once "functions.php";
 $result [0] = array();
-$users_ID = ""; $azm = "";
+$users_ID = "";
+$azm = "";
 if (isset($_REQUEST['id'])) {
     $users_ID = $_REQUEST['id'];
     //var_dump($_REQUEST['id']);
@@ -14,14 +15,8 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
 
     $result = getUserDataID($pdo, $sql, $users_ID);
     $azm = $result[0]["AM_ID"];
-    $newUser = false;
-
-} elseif (isset($_REQUEST['new'])) {
-    $newUser = true;
-//    $result[0]['rolles_ID'] ="2";
 
 }
-
 
 ?>
 
@@ -51,8 +46,8 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
 <body style="background-color: lightgray">
 <div class="container pt-5">
 
-    <form id = "formEmployee" action="sendEmendEmployee.php" method="post">
-        <input id="users_ID" type="hidden" name="users_ID" value="<?=$users_ID?>">
+    <form id="formEmployee" action="sendEmendEmployee.php" method="post">
+        <input id="users_ID" type="hidden" name="users_ID" value="<?= $users_ID ?>">
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">FamilienName</span>
             <input type="text" class="form-control" placeholder="FamilienName" aria-label="Username"
@@ -110,9 +105,7 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
                 }
 
                 ?>
-                <!--<option value="1">Arbeitsmodel 1 - 20 Stunde pro Woche</option>
-                <option value="2">Arbeitsmodel 2 - 37,5 Stunde pro Woche</option>
-                <option value="3">Arbeitsmodel 3 - 40 Stunde pro Woche</option>-->
+
 
             </select>
         </div>
@@ -120,8 +113,11 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
         <!--  if admin, soll select -->
         <div class="input-group mb-3 end">
             <div class="input-group-text">
-                <input id="rolles" class="form-check-input mt-0" type="checkbox" name="rolles" <?= $result[0]["rolles_ID"] === "1" ? "checked" : "" ?>
-                       aria-label="user" >
+                <input id="rolles" class="form-check-input mt-0" type="checkbox" name="rolles"
+                    <?php if (isset($result[0]["rolles_ID"]) && $result[0]["rolles_ID"] == "1") {
+                        echo "checked"; $rolles = "1";
+                    }  ?>
+                       aria-label="user">
             </div>
             <span class="input-group-text" id="basic-addon2">admin</span>
 
@@ -165,14 +161,12 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
                 }
 
                 ?>
-                <!--            <option value="1">Personalabteilung</option>-->
-                <!--            <option value="2">Entwicklung</option>-->
-                <!--            <option value="2">Grafik</option>-->
+
             </select>
         </div>
 
         <button type="submit" class="btn btn-secondary btn-lg m-3" value="submit">Speichern</button>
-      </form>
+    </form>
 
     <button type="reset"><a href="alleMitarbeiter.php">Zuruck</a></button>
 

@@ -9,35 +9,29 @@ $password = $_REQUEST['password'] ?? "";
 $personalNR = $_REQUEST['personalNR'] ?? "";
 $Abteilung = $_REQUEST['abteilung'] ?? "";
 $arbeitsModell = $_REQUEST['ArbeitsModell'] ?? "3";
-$rolles = $_REQUEST['rolles'] ?? "2";
 
-var_dump($rolles );
-die();
-
-echo "<pre>";
-var_dump($_REQUEST);
-
-
+if (isset($_REQUEST['rolles']) && $_REQUEST['rolles']=="on")
+{
+    $rolles ="1";
+//    var_dump($rolles);
+} else {
+    $rolles = "2";
+}
+//var_dump($rolles);
+//die();
+//echo "<pre>";
 $pdo = getPdo();
-
-if (isset($newUser)) {
-    $sql = "INSERT INTO users(users.FamilienName, users.Vorname, users.email, users.password, users.personalNR,
-                  users.Abteilung_ID, users.AM_ID, users.rolles_ID)
- VALUES (:FamilienName,:Vorname,:email,:password,:personalNR,:Abteilung, :arbeitsmodell, :rolles);";
+if ($users_ID === "") {
+    insertUser($pdo, $FamilienName, $Vorname, $email, $password,
+        $personalNR, $Abteilung, $arbeitsModell, $rolles);
     echo "new";
 } else {
-    $sql = "UPDATE users SET users.FamilienName = :FamilienName,users.Vorname=:Vorname, users.email=:email,
-                        users.password= :password, users.personalNR =:personalNR, users.Abteilung_ID= :Abteilung, 
-                        users.AM_ID = :arbeitsModell, users.rolles_ID =:rolles WHERE users.users_ID=:users_ID;";
-    //echo "updating";
+    updateUser($pdo, $users_ID, $FamilienName, $Vorname, $email, $password,
+        $personalNR, $Abteilung, $arbeitsModell, $rolles);
+    echo "updating";
 };
-
 // get data this users
 
-$result = sendUserData($pdo, $sql, $users_ID, $FamilienName, $Vorname, $email, $password, $arbeitsModell,
-    $rolles, $Abteilung, $personalNR);
+//echo "</pre>";
 
-
-var_dump($result);
-echo "</pre>";
-//header('Location: http://localhost:8080/Projektarbeit2021/src/php/alleMitarbeiter.php');
+header('Location: http://localhost:8080/Projektarbeit2021/src/php/alleMitarbeiter.php');

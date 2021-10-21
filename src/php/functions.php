@@ -7,7 +7,9 @@ function getPdo()
     $user = 'knmde_85';
     $pass = "gM5FGuqWab52QzqT";
 
-    return new PDO($dsn, $user, $pass);
+    $pdo = new PDO($dsn, $user, $pass);
+
+    return $pdo;
 }
 
 function getUser($pdo, $query, $email, $password)
@@ -26,7 +28,7 @@ function getAllUser($pdo, $query)
     /** @var PDO $pdo */
     $stmt = $pdo->prepare($query);
     $stmt->execute();     // query execution and search
-    return $stmt->fetchAll();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getUserData($pdo, $query, $email)
@@ -66,9 +68,12 @@ function getUserZeiten($pdo, $query, $email, $monat, $jahr)
 }
 
 
-function sendUserZeiten($pdo, $sql, $user_Id, $datum, $kommen, $gehen, $pause, $abwesungsGrundID)
+function sendUserZeiten($pdo, $user_Id, $datum, $kommen, $gehen, $pause, $abwesungsGrundID)
 {
 
+    $sql = "INSERT INTO zeit(zeit.users_ID, zeit.Datum, zeit.kommenZeit, zeit.gehenZeit, zeit.pause, zeit.abwesungsGrund_Id, zeit.akzeptiert)
+ VALUES (:user_Id,:datum,:kommen,:gehen,:pause,:abwesungsGrund,0) 
+ON DUPLICATE KEY UPDATE zeit.kommenZeit =:kommen,zeit.gehenZeit=:gehen,zeit.pause=:pause,zeit.abwesungsGrund_Id=:abwesungsGrund,zeit.akzeptiert=0;";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -79,22 +84,27 @@ function sendUserZeiten($pdo, $sql, $user_Id, $datum, $kommen, $gehen, $pause, $
         "pause" => $pause,
         "abwesungsGrund" => $abwesungsGrundID
     ]);     // query execution and search
-    $result = $stmt->fetchAll();
-    return $result;
+
+
 }
 
 
-function getMonthData($pdo, $sql, $monat, $jahr)
+function getMonthData($pdo, $monat, $jahr)
 {
+// query alle mitarbeiter in diesem Zeit raum
+    $sql = "SELECT * FROM zeit, users
+WHERE EXTRACT(YEAR FROM zeit.Datum) = :jahr AND EXTRACT(MONTH FROM zeit.Datum) = :monat;"; // userdaten abfragen
+//
 
     $stmt = $pdo->prepare($sql);
+
     $stmt->execute([
         "monat" => $monat,
         "jahr" => $jahr
 
     ]);     // query execution and search
-    $result = $stmt->fetchAll();
-    return $result;
+
+    return $stmt->fetchAll();
 }
 
 function getSectionUser($pdo, $sql, $abteilung)
@@ -119,24 +129,52 @@ function inputEmployee($input, $key)
 }
 
 
-function sendUserData($pdo, $sql, $users_ID, $FamilienName, $Vorname, $email, $password,
-                      $arbeitsModell, $rolles, $Abteilung, $personalNR)
-{
 
+
+function insertUser($pdo, $FamilienName, $Vorname, $email, $password,
+                      $personalNR, $Abteilung, $arbeitsModell, $rolles)
+{
+    $sql = "INSERT INTO users(users.FamilienName, users.Vorname, users.email, users.password, users.personalNR,
+                  users.Abteilung_ID, users.AM_ID, users.rolles_ID)
+            VALUES (:FamilienName,:Vorname,:email,:password,:personalNR,:Abteilung, :arbeitsModell, :rolles);";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        ":users_ID" => $users_ID,
-        ":FamilienName" => $FamilienName,
-        ":Vorname" => $Vorname,
-        ":email" => $email,
-        ":password" => $password,
-        ":arbeitsModell" => $arbeitsModell,
-        ":rolles" => $rolles,
-        ":Abteilung" => $Abteilung,
-        ":personalNR" => $personalNR
+        "FamilienName" => $FamilienName,
+        "Vorname" => $Vorname,
+        "email" => $email,
+        "password" => $password,
+        "personalNR" => $personalNR,
+        "Abteilung" => $Abteilung,
+        "arbeitsModell" => $arbeitsModell,
+        "rolles" => $rolles
+
 
     ]);     // query execution and search
 
-    return $stmt->fetchAll();
+}
+
+function updateUser($pdo, $users_ID, $FamilienName, $Vorname, $email, $password,
+                      $personalNR, $Abteilung, $arbeitsModell, $rolles )
+{
+
+    $sql = "UPDATE users SET users.FamilienName = :FamilienName,users.Vorname=:Vorname, users.email=:email,
+                        users.password= :password, users.personalNR =:personalNR, users.Abteilung_ID= :Abteilung, 
+                        users.AM_ID = :arbeitsModell, users.rolles_ID =:rolles WHERE users.users_ID=:users_ID;";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        "users_ID" => $users_ID,
+        "FamilienName" => $FamilienName,
+        "Vorname" => $Vorname,
+        "email" => $email,
+        "password" => $password,
+        "personalNR" => $personalNR,
+        "Abteilung" => $Abteilung,
+        "arbeitsModell" => $arbeitsModell,
+        "rolles" => $rolles
+
+
+    ]);
+
 }

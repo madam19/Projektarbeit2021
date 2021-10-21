@@ -5,8 +5,12 @@ require_once "functions.php";
 // connect to Sql
 $pdo = getPdo();
 $sql = "SELECT users.users_ID, users.FamilienName, users.Vorname, users.email, users.password, users.personalNR, arbeitsmodell.stundenWoche AS 'stunden',
-users.AM_ID, arbeitsmodell.AM_Name AS 'arbeitsmodell', rolles.rollesName AS 'rolle', abteilung.NameAbteilung AS 'abteilung' FROM users, arbeitsmodell, rolles, abteilung
-WHERE arbeitsmodell.AM_ID=users.AM_ID AND users.Abteilung_ID=abteilung.Abteilung_ID AND users.rolles_ID=rolles.rolles_ID;"; // get all users
+users.AM_ID, arbeitsmodell.AM_Name AS 'arbeitsmodell', rolles.rollesName AS 'rolle', abteilung.NameAbteilung AS 'abteilung' 
+FROM users LEFT JOIN arbeitsmodell on users.AM_ID = arbeitsmodell.AM_ID
+LEFT JOIN rolles ON users.rolles_ID = rolles.rolles_ID
+LEFT JOIN abteilung on users.Abteilung_ID = abteilung.Abteilung_ID
+WHERE arbeitsmodell.AM_ID=users.AM_ID AND users.Abteilung_ID=abteilung.Abteilung_ID AND users.rolles_ID=rolles.rolles_ID
+ORDER BY users.users_ID ASC;"; // get all users
 $result = getAllUser($pdo, $sql);
 //var_dump($result);
 // !wahrscheinlich bekommen wir abteilung von BD

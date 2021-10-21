@@ -69,8 +69,8 @@ $_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
 </div>
 <div class="container row">
     <button id="employee" type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Mitarbeiter</button>
-    <button type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Kontrolieren Monat</button>
-    <button type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Jahresbericht</button>
+    <button id ="checkMonth" type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Kontrolieren Monat</button>
+    <button id="checkYear" type="button" class="btn btn-secondary btn-lg m-3" <?=$hidden ?> >Jahresbericht</button>
     <button id="zeituebersicht" type="button" class="btn btn-secondary btn-lg m-3">meine Zeit um Monate</button>
 </div>
 
@@ -100,6 +100,21 @@ $_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
         // console.log("zeitenübersicht");
         window.location.assign("alleMitarbeiter.php");
     });
+
+
+    //show all employee in this month
+    $("body").on("click", "#checkMonth", function () {
+        // console.log("zeitenübersicht");
+        window.location.assign("checkMonth.php");
+    });
+
+
+    //show all employee in this year
+    $("body").on("click", "#checkYear", function () {
+        // console.log("zeitenübersicht");
+        window.location.assign("checkYear.php");
+    });
+
 
     //exit
     $("body").on("click", "#raus", function () {
