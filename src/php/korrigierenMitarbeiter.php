@@ -6,16 +6,13 @@ $users_ID = "";
 $azm = "";
 if (isset($_REQUEST['id'])) {
     $users_ID = $_REQUEST['id'];
-    //var_dump($_REQUEST['id']);
+   var_dump($_REQUEST['id']);
     $pdo = getPdo();
-    $sql = "SELECT users.users_ID, users.FamilienName, users.Vorname, users.email, users.password, users.personalNR,users.Abteilung_ID, arbeitsmodell.stundenWoche AS 'stunden',
-users.AM_ID, users.rolles_ID,  arbeitsmodell.AM_Name AS 'arbeitsmodell', rolles.rollesName AS 'rolle', abteilung.NameAbteilung AS 'abteilung' FROM users, arbeitsmodell, rolles, abteilung
-WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.Abteilung_ID=abteilung.Abteilung_ID AND users.rolles_ID=rolles.rolles_ID";
-    // get data this users
 
-    $result = getUserDataID($pdo, $sql, $users_ID);
-    $azm = $result[0]["AM_ID"];
-
+      // get data this users
+    $result = getUserDataID($pdo, $users_ID);
+  $azm = $result[0]["AM_ID"];
+//var_dump($result);
 }
 
 ?>
@@ -106,7 +103,11 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
 
                 ?>
             </select>
-            <label id = "summaTimeAllDay" class="input-group-text" for="inputSelectArbeitsModell"></label>
+            <label id = "summaTimeAllDay" class="input-group-text" for="inputSelectArbeitsModell">
+                <?php
+//                echo ($result[0]['Montag']+$result[0]['Dienstag']+$result[0]['Mittwoch']+$result[0]['Donnerstag']+$result[0]['Freitag']);
+                ?>
+            </label>
         </div>
         <!--  users_arbeitsmodell per WochenTag-->
 
@@ -135,23 +136,43 @@ WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.A
                 <tr class="table-primary">
                     <td class="table-primary">
                         <input id="inputMontag" type="time" class="form-control" placeholder="Montag" aria-label="Montag"
-                               aria-describedby="basic-addon2" name="Montag" value="08:00">
+                               aria-describedby="basic-addon2" name="Montag" value="<?php if (!isset($result[0]['Montag'])) {
+                            echo "08:00";
+                        } else {
+                            echo ($result[0]['Montag']);
+                        }?>">
                                                </td>
                     <td class="table-primary">
                         <input id="inputDienstag" type="time" class="form-control" placeholder="Dienstag" aria-label="Dienstag"
-                               aria-describedby="basic-addon2" name="Montag" value="08:00">
+                               aria-describedby="basic-addon2" name="Dienstag" value="<?php if (!isset($result[0]['Dienstag'])) {
+                            echo "08:00";
+                        } else {
+                            echo ($result[0]['Dienstag']);
+                        }?>">
                        </td>
                     <td class="table-primary">
                         <input id="inputMittwoch" type="time" class="form-control" placeholder="Mittwoch" aria-label="Mittwoch"
-                               aria-describedby="basic-addon2" name="Mittwoch" value="08:00">
+                               aria-describedby="basic-addon2" name="Mittwoch" value="<?php if (!isset($result[0]['Mittwoch'])) {
+                            echo "08:00";
+                        } else {
+                            echo ($result[0]['Mittwoch']);
+                        }?>">
                         </td>
                     <td class="table-primary">
                         <input id="inputDonnerstag" type="time" class="form-control" placeholder="Donnerstag" aria-label="Donnerstag"
-                               aria-describedby="basic-addon2" name="Donnerstag" value="08:00">
+                               aria-describedby="basic-addon2" name="Donnerstag" value="<?php if (!isset($result[0]['Mittwoch'])) {
+                            echo "08:00";
+                        } else {
+                            echo ($result[0]['Donnerstag']);
+                        }?>">
                         </td>
                     <td class="table-primary">
                         <input id="inputFreitag" type="time" class="form-control" placeholder="Freitag" aria-label="Freitag"
-                               aria-describedby="basic-addon2" name="Freitag" value="05:30">
+                               aria-describedby="basic-addon2" name="Freitag" value="<?php if (!isset($result[0]['Freitag'])) {
+                            echo "05:30";
+                        } else {
+                            echo ($result[0]['Freitag']);
+                        }?>">
                         </td>
                 </tr>
 

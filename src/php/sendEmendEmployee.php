@@ -25,23 +25,24 @@ $pdo = getPdo();
 if ($users_ID === "") {
     insertUser($pdo, $FamilienName, $Vorname, $email, $password,
         $personalNR, $Abteilung, $arbeitsModell, $rolles);
-    echo "new";
+//    echo "new";
 } else {
     updateUser($pdo, $users_ID, $FamilienName, $Vorname, $email, $password,
         $personalNR, $Abteilung, $arbeitsModell, $rolles);
-    echo "updating";
+//    echo "updating";
 };
 // get data this users
 //echo "</pre>";
 //get all Data for tabelle usersArbeitszeit
 
-$FamilienName = $_REQUEST['FamilienName'] ?? "";
-$Vorname = $_REQUEST['Vorname'] ?? "";
-$email = $_REQUEST['email'] ?? "";
-$password = $_REQUEST['password'] ?? "";
-$personalNR = $_REQUEST['personalNR'] ?? "";
-$Abteilung = $_REQUEST['abteilung'] ?? "";
+$Montag = $_REQUEST['Montag'] ?? "";
+$Dienstag = $_REQUEST['Dienstag'] ?? "";
+$Mittwoch= $_REQUEST['Mittwoch'] ?? "";
+$Donnerstag = $_REQUEST['Donnerstag'] ?? "";
+$Freitag = $_REQUEST['Freitag'] ?? "";
 
+
+updateWorkTime($pdo,$users_ID,$arbeitsModell, $Montag, $Dienstag, $Mittwoch, $Donnerstag, $Freitag );
 
 
 

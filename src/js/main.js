@@ -62,7 +62,7 @@ function createTable(result, month, year) {
     let data = dataAll["zeiten"];
     let userdaten = dataAll["userdaten"];
 
-    // console.log(data);
+    console.log(dataAll);
     // console.log(data.length);
     let controlData = false; // default - new monat
     let akzept = false; //kontrolieren akzept

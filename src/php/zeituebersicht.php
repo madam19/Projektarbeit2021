@@ -65,7 +65,7 @@ echo "<strong><h5> Personal-Nr. " . $result[0]["personalNR"] . " " . "</h5><br>"
           },
           function handler(result) {
             // console.log("handler in ok click, result: ");
-            // console.log(result);
+             console.log(result);
             // let data = (JSON.parse(result));
             createTable(result, month, year);
           }

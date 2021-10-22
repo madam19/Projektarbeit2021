@@ -7,9 +7,7 @@ function getPdo()
     $user = 'knmde_85';
     $pass = "gM5FGuqWab52QzqT";
 
-    $pdo = new PDO($dsn, $user, $pass);
-
-    return $pdo;
+    return new PDO($dsn, $user, $pass);
 }
 
 function getUser($pdo, $query, $email, $password)
@@ -25,32 +23,35 @@ function getUser($pdo, $query, $email, $password)
 
 function getAllUser($pdo, $query)
 {
-    /** @var PDO $pdo */
-    $stmt = $pdo->prepare($query);
+     $stmt = $pdo->prepare($query);
     $stmt->execute();     // query execution and search
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getUserData($pdo, $query, $email)
 {
-    /** @var PDO $pdo */
-    $stmt = $pdo->prepare($query);
+      $stmt = $pdo->prepare($query);
     $stmt->execute([
         ":email" => $email
 
     ]);     // query execution and search
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+//
 }
 
-function getUserDataID($pdo, $query, $users_ID)
+function getUserDataID($pdo, $users_ID)
 {
-    /** @var PDO $pdo */
+    $query = "SELECT users.users_ID, users.FamilienName, users.Vorname, users.email, users.password, users.personalNR,users.Abteilung_ID, arbeitsmodell.stundenWoche AS 'stunden',
+users.AM_ID, users.rolles_ID,  arbeitsmodell.AM_Name AS 'arbeitsmodell', rolles.rollesName AS 'rolle', abteilung.NameAbteilung AS 'abteilung', userArbeitsModell.Montag, userArbeitsModell.Dienstag, userArbeitsModell.Mittwoch, userArbeitsModell.Donnerstag, userArbeitsModell.Freitag 
+FROM users, arbeitsmodell, rolles, abteilung, userArbeitsModell
+WHERE users.users_ID = :users_ID AND arbeitsmodell.AM_ID=users.AM_ID AND users.Abteilung_ID=abteilung.Abteilung_ID AND users.rolles_ID=rolles.rolles_ID AND users.users_ID=userArbeitsModell.fk_users_ID;";
+
     $stmt = $pdo->prepare($query);
     $stmt->execute([
-        ":users_ID" => $users_ID
+        "users_ID" => $users_ID
 
     ]);     // query execution and search
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll();
 }
 
 
@@ -178,3 +179,21 @@ function updateUser($pdo, $users_ID, $FamilienName, $Vorname, $email, $password,
     ]);
 
 }
+ function updateWorkTime($pdo,$users_ID, $arbeitsModell, $Montag, $Dienstag, $Mittwoch, $Donnerstag, $Freitag )
+ {
+     $sql = "INSERT INTO userArbeitsModell(fk_ArbeitsModel, fk_users_ID, Montag, Dienstag, Mittwoch, Donnerstag, Freitag)
+ VALUES (:arbeitsModell,:users_ID,:Montag,:Dienstag,:Mittwoch,:Donnerstag,:Freitag) 
+ON DUPLICATE KEY UPDATE Montag =:Montag , Dienstag=:Dienstag, Mittwoch=:Mittwoch, Donnerstag=:Donnerstag, Freitag=:Freitag;";
+
+     $stmt = $pdo->prepare($sql);
+     $stmt->execute([
+         "users_ID" =>$users_ID,
+         "arbeitsModell" => $arbeitsModell,
+         "Montag" => $Montag,
+         "Dienstag" => $Dienstag,
+         "Mittwoch" => $Mittwoch,
+         "Donnerstag" => $Donnerstag,
+         "Freitag" => $Freitag]);
+
+
+ }
