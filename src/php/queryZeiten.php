@@ -6,16 +6,16 @@ require_once "functions.php";
 $email = $_SESSION['email'];
 $monat = $_REQUEST['month'];
 $jahr = $_REQUEST['year'];
-var_dump($_REQUEST);
+//var_dump($_REQUEST);
 
 // PDO object
 $pdo = getPdo();
 
 
 // query 1: users daten
-$sql1 = "SELECT * FROM users, userArbeitsModell, arbeitsmodell WHERE users.email = ':email' AND userArbeitsModell.fk_users_ID=users.users_ID AND arbeitsmodell.AM_ID=userArbeitsModell.fk_ArbeitsModel;";
+$sql1 = "SELECT * FROM users, userArbeitsModell, arbeitsmodell WHERE users.email = :email AND userArbeitsModell.fk_users_ID=users.users_ID AND arbeitsmodell.AM_ID=userArbeitsModell.fk_ArbeitsModel;";
 //
-$daten =  getUserData($pdo, $sql1, $email); // ergebnis aus sql1
+$daten = getUserData($pdo, $sql1, $email); // ergebnis aus sql1
 
 $result["userdaten"] = $daten;
 

@@ -57,8 +57,8 @@ function saveDay() {
 
 
 function createTable(result, month, year) {
-    // console.log(result);
-    let dataAll = (JSON.parse(result));
+    console.log(result);
+    let dataAll = JSON.parse(result);
     let data = dataAll["zeiten"];
     let userdaten = dataAll["userdaten"];
 
