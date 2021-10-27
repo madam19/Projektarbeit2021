@@ -95,19 +95,20 @@ $_SESSION['usersArbeitsModel'] = $usersArbeitsModel;
       window.location.assign("alleMitarbeiter.php");
     });
 
-    //checkMonth
+
+    //show all employee in this month
     $("body").on("click", "#checkMonth", function() {
-      //         $pdo = null;   //php
-      //        session_end();
+      // console.log("zeitenübersicht");
       window.location.assign("checkMonth.php");
     });
 
-    //checkYear
+
+    //show all employee in this year
     $("body").on("click", "#checkYear", function() {
-      //         $pdo = null;   //php
-      //        session_end();
-      window.location.assign("../index.php");
+      // console.log("zeitenübersicht");
+      window.location.assign("checkYear.php");
     });
+
 
     //exit
     $("body").on("click", "#raus", function() {

@@ -1,12 +1,7 @@
 <?php
 
 
-
 ?>
-
-
-
-
 
 
 <!DOCTYPE html>
@@ -27,21 +22,26 @@
 <body style="background-color: lightgray">
 
 
-
-
-
-  <div class="container">
+  <div class="container mt-5">
     <!--   display month-->
-    <input id="month" type="month" name="month" value="">
-    <button type="submit" id="ok"> ok</button>
+    <h2 class="m-5">
+      Monatübersicht für alle Mitarbeiter
+    </h2>
+    <div class="container m-4">
+      <input id="month" type="month" name="month" value="">
+      <button type="submit" id="ok"> ok</button>
+    </div>
 
 
-    <button type="reset"><a href="mydata.php">Zuruck</a></button>
-    <button id="saveData" type="button" class="btn btn-secondary btn-lg m-3 ">Speichern</button>
+
+
+    <div class="container">
+
+      <button type="reset"><a href="mydata.php">Zuruck</a></button>
+      <button id="saveData" type="button" class="btn btn-secondary btn-lg m-3 ">Speichern</button>
+    </div>
+
   </div>
-
-
-
 
 
   <script>
@@ -57,8 +57,9 @@
         let month = datum.getMonth() + 1;
         // console.log(result);
         let year = datum.getFullYear();
+        // script come data all employee in this month
+        let url = "../php/queryMonthZeit.php";
 
-        let url = "../php/queryMonthZeit.php"; // das php script liegt hier
 
         //
         // console.log("MONTH: " + month );
@@ -71,10 +72,8 @@
             year: year
           },
           function handler(result) {
-            // console.log("handler in ok click, result: ");
             // console.log(result);
-            // let data = (JSON.parse(result));
-            createTableMonth(result, month, year);
+            createMonthTable(result, month, year);
           }
         );
       }, );

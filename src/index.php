@@ -13,28 +13,25 @@ if (isset($_REQUEST['submit'])) {
   $email = $_REQUEST['emailUser'];
   $password = $_REQUEST['passwordUser'];
 
-  //    var_dump($email);
-  //    var_dump($password);
+  //      var_dump($email);
+  //      var_dump($password);
 
   $pdo = getPdo();
   // sql
   $sql = "SELECT users.users_ID, users.email, users.password FROM users WHERE users.email =:email AND users.password =:password";
   $result = getUser($pdo, $sql, $email, $password);
 
-  //    var_dump($result);
-
   if (empty($result)) { // eingabe falsch
     // zurück auf index?fehler
-    //  // header mit ?fehler
     header('Location: http://localhost:8080/Projektarbeit2021/src/index.php?fehler=1');
     $pdo = null;   // Verbindung schliessen
   } else { // eingabe richtig - gehe weiter
     // $_SESSION setzen
     $_SESSION['email'] = $email;
     $_SESSION['users_ID'] = $result[0]['users_ID'];
-    var_dump($email);
-    var_dump($_SESSION['users_ID']);
-    //$email = $_REQUEST['emailUser'];
+    //var_dump($email);
+    // var_dump($_SESSION['users_ID']);
+
     //         connect to Sql
     $pdo = getPdo();
     $sql = "SELECT * FROM users WHERE users.email =:email"; //
@@ -43,8 +40,8 @@ if (isset($_REQUEST['submit'])) {
     header('Location: http://localhost:8080/Projektarbeit2021/src/php/myData.php');
   }
 
-  //echo $_REQUEST['submit'];
-  //    die();
+  echo $_REQUEST['submit'];
+  die();
 }
 ?>
 
